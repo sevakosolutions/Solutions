@@ -1344,7 +1344,7 @@ html.light #toast{box-shadow:0 8px 32px rgba(0,0,0,0.12);}
       <div style="font-size:12px;color:var(--muted)">Organisation updates, highlights & announcements</div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <select id="notice-filter-cat" class="fc" style="width:150px;font-size:12px;" onchange="renderNotices()">
+      <select id="notice-filter-cat" class="fc" style="width:150px;font-size:12px;display:none;" onchange="renderNotices()">
         <option value="">All Categories</option>
         <option>Announcement</option>
         <option>Birthday</option>
@@ -4702,48 +4702,91 @@ async function loadNotices() {
 function renderNotices() {
   const cat = document.getElementById('notice-filter-cat')?.value || '';
   const filtered = noticesData.filter(n => !cat || n.category === cat);
-  const pinned = filtered.filter(n=>n.pinned);
-  const regular = filtered.filter(n=>!n.pinned);
+  const pinned   = filtered.filter(n => n.pinned);
+  const regular  = filtered.filter(n => !n.pinned);
+  const all      = [...pinned, ...regular]; // pinned first
 
-  // Highlights strip
+  // ── Category summary cards (always show at top) ──
   const hlEl = document.getElementById('notice-highlights');
-  if (hlEl && pinned.length) {
-    hlEl.innerHTML = pinned.map(n=>`
-      <div class="notice-highlight">
-        <span style="font-size:20px;">${getCatEmoji(n.category)}</span>
-        <div>
-          <div style="font-size:13px;font-weight:600;color:var(--ink)">${n.title}</div>
-          <div style="font-size:11px;color:var(--muted)">${n.category} · ${new Date(n.created_at).toLocaleDateString('en-IN')}</div>
-        </div>
+  if (hlEl) {
+    const cats = [
+      { name:'Announcement',   emoji:'📢', color:'#3b82f6', bg:'#1e3a5f' },
+      { name:'Birthday',       emoji:'🎂', color:'#ec4899', bg:'#4a1942' },
+      { name:'Promotion',      emoji:'🏆', color:'#f59e0b', bg:'#4a3000' },
+      { name:'Holiday',        emoji:'🎉', color:'#10b981', bg:'#0a3a28' },
+      { name:'Product Launch', emoji:'🚀', color:'#8b5cf6', bg:'#2d1b5e' },
+      { name:'General',        emoji:'📋', color:'#64748b', bg:'#1e2a3a' },
+    ];
+    const counts = {};
+    noticesData.forEach(n => { counts[n.category] = (counts[n.category]||0)+1; });
+    hlEl.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:20px;">
+        ${cats.map(c => `
+          <div onclick="document.getElementById('notice-filter-cat').value='${c.name}';renderNotices();"
+               style="background:${c.bg};border:1.5px solid ${c.color}33;border-radius:12px;padding:14px 12px;
+                      cursor:pointer;transition:all .15s;text-align:center;
+                      ${cat===c.name?`box-shadow:0 0 0 2px ${c.color};`:''}">
+            <div style="font-size:24px;margin-bottom:6px;">${c.emoji}</div>
+            <div style="font-size:12px;font-weight:700;color:${c.color};">${c.name}</div>
+            <div style="font-size:18px;font-weight:800;color:var(--ink);margin-top:2px;">${counts[c.name]||0}</div>
+          </div>
+        `).join('')}
       </div>
-    `).join('');
-  } else if (hlEl) hlEl.innerHTML = '';
+      ${cat ? `<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <span style="font-size:13px;color:var(--muted);">Showing: <strong style="color:var(--ink);">${cat}</strong></span>
+        <button onclick="document.getElementById('notice-filter-cat').value='';renderNotices();"
+                style="font-size:11px;padding:2px 8px;border-radius:6px;border:1px solid var(--br2);background:var(--s2);color:var(--muted);cursor:pointer;">✕ Clear</button>
+      </div>` : ''}
+    `;
+  }
 
-  // All notices
+  // ── Notice cards ──
   const el = document.getElementById('notice-list');
   if (!el) return;
-  if (!filtered.length) {
-    el.innerHTML = `<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:36px;margin-bottom:8px;">📋</div><div>No notices yet</div></div>`;
+  if (!all.length) {
+    el.innerHTML = `<div style="text-align:center;padding:40px;color:var(--muted);">
+      <div style="font-size:36px;margin-bottom:8px;">📋</div>
+      <div>${cat ? 'No '+cat+' notices yet' : 'No notices yet'}</div>
+    </div>`;
     return;
   }
-  el.innerHTML = regular.map(n => `
-    <div class="notice-card ${n.pinned?'pinned':''}">
-      ${n.pinned?'<div class="notice-pin">📌</div>':''}
-      <span class="notice-cat ${n.category.replace(' ','-')}">${getCatEmoji(n.category)} ${n.category}</span>
-      <div class="notice-title">${n.title}</div>
-      <div class="notice-body">${n.body||''}</div>
-      ${n.attachment_url?`<div style="margin-top:8px;"><a href="${n.attachment_url}" target="_blank" style="font-size:12px;color:var(--accent3);">📎 View Attachment</a></div>`:''}
-      <div class="notice-footer">
-        <span>Posted by ${n.posted_by?.split('@')[0]||'Admin'}</span>
-        <span>${new Date(n.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
+
+  const catColors = {
+    Announcement:'#3b82f6', Birthday:'#ec4899', Promotion:'#f59e0b',
+    Holiday:'#10b981', 'Product Launch':'#8b5cf6', General:'#64748b'
+  };
+
+  el.innerHTML = all.map(n => {
+    const color = catColors[n.category] || '#64748b';
+    const isAdmin = currentUser?.role==='Admin'||currentUser?.role==='SuperAdmin';
+    return `
+    <div class="notice-card ${n.pinned?'pinned':''}"
+         style="border-left:4px solid ${color};background:var(--s1);border-radius:12px;
+                padding:18px 20px;margin-bottom:12px;position:relative;">
+      ${n.pinned ? `<div style="position:absolute;top:14px;right:14px;font-size:12px;color:var(--muted);">📌 Pinned</div>` : ''}
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="background:${color}22;color:${color};border:1px solid ${color}44;
+                     border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;">
+          ${getCatEmoji(n.category)} ${n.category}
+        </span>
       </div>
-      ${currentUser?.role==='Admin'||currentUser?.role==='SuperAdmin'?`
-        <div style="display:flex;gap:6px;margin-top:8px;">
-          <button class="btn btn-ghost btn-sm" style="font-size:11px;" onclick="togglePinNotice('${n.id}',${!n.pinned})">${n.pinned?'Unpin':'📌 Pin'}</button>
-          <button class="btn btn-ghost btn-sm" style="font-size:11px;color:var(--red);" onclick="deleteNotice('${n.id}')">Delete</button>
-        </div>`:''}
-    </div>
-  `).join('');
+      <div style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px;">${n.title}</div>
+      <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:12px;">${n.body||''}</div>
+      ${n.attachment_url?`<div style="margin-bottom:10px;"><a href="${n.attachment_url}" target="_blank"
+        style="font-size:12px;color:var(--accent3);text-decoration:none;">📎 View Attachment</a></div>`:''}
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:11px;color:var(--muted);">Posted by ${n.posted_by?.split('@')[0]||'Admin'}</span>
+        <span style="font-size:11px;color:var(--muted);">${new Date(n.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
+      </div>
+      ${isAdmin ? `
+        <div style="display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--br);">
+          <button class="btn btn-ghost btn-sm" style="font-size:11px;"
+            onclick="togglePinNotice('${n.id}',${!n.pinned})">${n.pinned?'📌 Unpin':'📌 Pin'}</button>
+          <button class="btn btn-ghost btn-sm" style="font-size:11px;color:var(--red);"
+            onclick="deleteNotice('${n.id}')">🗑 Delete</button>
+        </div>` : ''}
+    </div>`;
+  }).join('');
 }
 
 function getCatEmoji(cat) {
