@@ -10,9 +10,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sevako">
 <link rel="apple-touch-icon" href="https://sevako.in/icon-192.png">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23000'/><text y='.9em' font-size='72' font-family='sans-serif' font-weight='bold' fill='%2344bb00' x='50%' text-anchor='middle' dominant-baseline='hanging' dy='8'>S</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231246f0'/><text y='.9em' font-size='72' font-family='sans-serif' font-weight='bold' fill='white' x='50%' text-anchor='middle' dominant-baseline='hanging' dy='8'>S</text></svg>">
 <script>
-// Inline manifest — uses current origin so works on any subdomain
+// Inline manifest injection — no /manifest.json file needed
 (function(){
   const base = window.location.origin;
   const manifest = {
@@ -36,8 +36,9 @@
     categories:["business","productivity"],lang:"en-IN"
   };
   const blob = new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+  const url  = URL.createObjectURL(blob);
   const link = document.createElement('link');
-  link.rel = 'manifest'; link.href = URL.createObjectURL(blob);
+  link.rel  = 'manifest'; link.href = url;
   document.head.appendChild(link);
 })();
 </script>
@@ -100,11 +101,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 #login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#07111f 0%,#0d1b2e 60%,#071428 100%);z-index:9999;display:flex;align-items:center;justify-content:center;}
 .login-box{background:var(--s1);border:1px solid var(--br2);border-radius:20px;padding:44px 40px;width:440px;box-shadow:0 20px 60px rgba(0,0,0,0.4),0 0 0 1px rgba(18,70,240,0.08);}
 .login-brand{text-align:center;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--br);}
-#login-logo{text-align:center;}
-.login-logo{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--ink);letter-spacing:-1px;white-space:nowrap;display:block;text-align:center;line-height:1.1;}
-.login-logo span{color:#4ccb26;}
-.logo-mark{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--ink);white-space:nowrap;letter-spacing:-0.5px;}
-.logo-mark span{color:#4ccb26;}
+.login-logo{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--ink);letter-spacing:-1px;}
+.login-logo span{color:var(--accent3);}
 .login-tagline{font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:4px;}
 .login-sub{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:22px;text-align:center;}
 .login-label{font-size:10.5px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;display:block;}
@@ -135,7 +133,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 #sidebar-overlay.show{display:block;}
 .logo-wrap{padding:22px 20px 18px;border-bottom:1px solid var(--br);}
 .logo-mark{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--ink);}
-.logo-mark span{color:#4ccb26;}
+.logo-mark span{color:var(--accent3);}
 .logo-sub{font-size:9px;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-top:2px;}
 .logo-tenant{font-size:11px;color:var(--accent3);margin-top:4px;font-weight:600;}
 .nav-sec{font-size:9px;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;padding:16px 20px 5px;font-weight:600;}
@@ -592,12 +590,6 @@ html.light input,html.light textarea,html.light select{color:var(--ink)!importan
 .notice-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:11px;color:var(--muted);}
 .notice-highlight{background:linear-gradient(135deg,rgba(18,70,240,.15),rgba(61,111,255,.08));border:1px solid rgba(18,70,240,.25);border-radius:var(--rl);padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
 
-/* ── VIEW PAGES FULL WIDTH FIX ── */
-#view-tasks, #view-notices {
-  width:100%;max-width:100%;
-  box-sizing:border-box;overflow-x:hidden;
-}
-
 /* ── PWA INSTALL BANNER ── */
 #pwa-install-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;padding:12px 20px;background:var(--accent);color:#fff;align-items:center;justify-content:space-between;gap:12px;font-size:13px;font-weight:600;box-shadow:0 -4px 20px rgba(0,0,0,.3);}
 #pwa-install-bar.show{display:flex;}
@@ -646,9 +638,7 @@ html.light input,html.light textarea,html.light select{color:var(--ink)!importan
           <span class="theme-toggle-icon"></span>
         </button>
       </div>
-      <div id="login-logo">
-        <div class="login-logo">sev<span>ako</span></div>
-      </div>
+      <div class="login-logo" id="login-logo">sev<span>ako</span></div>
       <div class="login-tagline">HELPDESK PLATFORM</div>
       <div style="font-size:12px;color:var(--accent3);font-weight:600;margin-top:4px;min-height:16px;" id="login-tenant-name"></div>
     </div>
@@ -704,7 +694,7 @@ html.light input,html.light textarea,html.light select{color:var(--ink)!importan
   <div class="sidebar">
     <div class="logo-wrap">
       <div class="logo-mark" id="sb-logo">sev<span>ako</span></div>
-      <div class="logo-sub">HELP DESK</div>
+      <div class="logo-sub">Help Desk</div>
       <div class="logo-tenant" id="sb-tenant-name"></div>
     </div>
 
@@ -1129,6 +1119,8 @@ html.light input,html.light textarea,html.light select{color:var(--ink)!importan
   <div class="sidebar" id="chat-sidebar" style="z-index:201;">
     <div class="logo-wrap">
       <div class="logo-mark" id="chat-logo">sev<span>ako</span></div>
+      <div class="logo-sub">Chat</div>
+    </div>
     <div style="padding:10px 14px;"><button class="btn btn-primary" style="width:100%;font-size:12px;" onclick="closeChat()">← Back to Helpdesk</button></div>
     <div class="chat-search"><input id="chat-search-inp" placeholder="🔍 Search by name, dept, email..." oninput="searchChatUsers(this.value)"></div>
     <div class="chat-tabs">
@@ -1167,7 +1159,7 @@ html.light input,html.light textarea,html.light select{color:var(--ink)!importan
           📎<input type="file" id="chat-file-inp" style="display:none" onchange="sendChatFile(this)" multiple>
         </label>
         <textarea class="chat-input" id="chat-msg-inp" placeholder="Type a message... (Enter to send, Shift+Enter for new line)" rows="1"
-          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMessage();}"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMessage();}
           oninput="autoResizeChatInput(this)"></textarea>
         <button class="chat-send-btn" onclick="sendChatMessage()" title="Send (Enter)">➤</button>
       </div>
@@ -1190,7 +1182,7 @@ html.light input,html.light textarea,html.light select{color:var(--ink)!importan
         <option value="Done">Done</option>
         <option value="Overdue">Overdue</option>
       </select>
-      <button class="btn btn-primary btn-sm" id="btn-assign-task" onclick="openAssignTaskModal()" style="display:none;">+ Assign Task</button>
+      <button class="btn btn-primary btn-sm hidden" id="btn-assign-task" onclick="openAssignTaskModal()">+ Assign Task</button>
     </div>
   </div>
 
@@ -1227,7 +1219,7 @@ html.light input,html.light textarea,html.light select{color:var(--ink)!importan
         <option>Product Launch</option>
         <option>General</option>
       </select>
-      <button class="btn btn-primary btn-sm" id="btn-post-notice" onclick="openModal('modal-post-notice')" style="display:none;">+ Post Notice</button>
+      <button class="btn btn-primary btn-sm hidden" id="btn-post-notice" onclick="openModal('modal-post-notice')">+ Post Notice</button>
     </div>
   </div>
   <div id="notice-highlights" style="margin-bottom:16px;"></div>
@@ -1627,8 +1619,8 @@ function loadLocal() {
       document.documentElement.style.setProperty('--tenant-accent', br.color);
       const lname = (br.logo||'sevako').toLowerCase().replace(/\s+/g,'');
       const first = lname.slice(0,3), rest = lname.slice(3);
-      const logoText = document.querySelector('#login-logo .login-logo');
-      if (logoText) logoText.innerHTML = first + '<span>' + (rest||'·') + '</span>';
+      const logoEl = document.getElementById('login-logo');
+      if (logoEl) logoEl.innerHTML = first + '<span>' + (rest||'·') + '</span>';
     }
   } catch(e) {}
   try { masterDepts = JSON.parse(localStorage.getItem('sv_depts')) || masterDepts; } catch(e){}
@@ -1927,14 +1919,11 @@ function applyTenantBranding() {
   if (TENANT.logoText) {
     const lname = TENANT.logoText.toLowerCase().replace(/\s+/g,'');
     const first = lname.slice(0,3), rest = lname.slice(3);
-    const logoHtml = first + '<span>' + (rest||'·') + '</span>';
-    // Only update the text div inside login-logo, not the whole wrapper (which contains the SVG)
-    const loginLogoText = document.querySelector('#login-logo .login-logo');
-    const sbLogo = document.getElementById('sb-logo');
-    const chatLogo = document.getElementById('chat-logo');
-    if (loginLogoText) loginLogoText.innerHTML = logoHtml;
-    if (sbLogo)    sbLogo.innerHTML = logoHtml;
-    if (chatLogo)  chatLogo.innerHTML = logoHtml;
+    const html = first + '<span>' + (rest||'·') + '</span>';
+    const loginLogo = document.getElementById('login-logo');
+    const sbLogo    = document.getElementById('sb-logo');
+    if (loginLogo) loginLogo.innerHTML = html;
+    if (sbLogo)    sbLogo.innerHTML = html;
   }
 }
 
@@ -2177,19 +2166,8 @@ function nav(view, dept) {
   else if (view === 'superadmin') renderSuperAdmin();
   else if (view === 'dept') renderDeptView(currentDept);
   else if (view === 'chat') { setTimeout(openChat, 100); }
-  else if (view === 'tasks') {
-    const isHead = ['Manager','Admin','SuperAdmin'].includes(currentUser?.role);
-    const btn = document.getElementById('btn-assign-task');
-    if (btn) btn.style.display = isHead ? 'flex' : 'none';
-    loadTasks();
-  }
-  else if (view === 'notices') {
-    const canPost = ['Admin','SuperAdmin','Manager'].includes(currentUser?.role);
-    const nbtn = document.getElementById('btn-post-notice');
-    if (nbtn) nbtn.style.display = canPost ? 'flex' : 'none';
-    if (currentUser) loadNotices();
-    else document.getElementById('notice-public-prompt')?.classList.remove('hidden');
-  }
+  else if (view === 'tasks') { loadTasks(); document.getElementById('btn-assign-task')?.classList.toggle('hidden', !['Manager','Admin','SuperAdmin'].includes(currentUser?.role)); }
+  else if (view === 'notices') { if (currentUser) loadNotices(); else document.getElementById('notice-public-prompt')?.classList.remove('hidden'); }
 }
 
 function goBack() {
@@ -2306,7 +2284,7 @@ async function renderTaskMiniDashboard() {
 async function renderChatMiniDashboard() {
   const el = document.getElementById('dash-chat-mini'); if (!el) return;
   try {
-    const unread = await sbFetch(`chat_messages?tenant_subdomain=eq.${TENANT.subdomain}&read=eq.false&select=from_email,message,created_at&order=created_at.desc&limit=5`);
+    const unread = await sbFetch(`chat_messages?to_email=eq.${currentUser?.email}&read=eq.false&tenant_subdomain=eq.${TENANT.subdomain}&select=from_email,message,created_at&order=created_at.desc&limit=5`);
     const count = unread?.length || 0;
     el.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
@@ -2361,7 +2339,7 @@ async function loadTicketsFromSupabase(f = {}, page = 1) {
   if (f.prio)   query += `&priority=eq.${encodeURIComponent(f.prio)}`;
   try {
     // Get count first (cached)
-    let countQuery = `tickets?tenant_subdomain=eq.${TENANT.subdomain}&select=ticket_id`;
+    let countQuery = `tickets?tenant_subdomain=eq.${TENANT.subdomain}&select=id`;
     if (f.dept)   countQuery += `&department=eq.${encodeURIComponent(f.dept)}`;
     if (f.status) countQuery += `&status=eq.${encodeURIComponent(f.status)}`;
     if (f.prio)   countQuery += `&priority=eq.${encodeURIComponent(f.prio)}`;
@@ -2596,7 +2574,6 @@ function submitTicket() {
     showToast('Please fill all required fields', 'err'); return;
   }
 
-  const uuidId = crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:r&0x3|0x8).toString(16);});
   const id = 'HD-' + String(tickets.length+1).padStart(4,'0');
   const slaKey = dept + '|' + typeName;
   const slaHours = (() => {
@@ -2616,7 +2593,7 @@ function submitTicket() {
   saveLocal();
   showToast('Ticket ' + id + ' submitted!', 'ok');
   sbSync('tickets', {
-    id: uuidId, ticket_id: id, tenant_subdomain: TENANT.subdomain,
+    ticket_id: id, tenant_subdomain: TENANT.subdomain,
     subject, department: dept, ticket_type: typeName,
     priority: prio, status: 'Open', raised_by: raisedBy,
     description: desc, date_raised: date, sla_hours: slaHours,
@@ -2777,20 +2754,16 @@ function quickResolve(id) {
   t.status='Resolved';
   if(!t.remarks)t.remarks=[];
   t.remarks.push({by:currentUser?.name||'System',at:new Date().toLocaleString('en-IN'),text:'Ticket resolved.',statusChange:'Resolved'});
-  saveLocal(); openDetail(id); showToast('Ticket resolved ✅','ok');
-  sbPatch('tickets','ticket_id',id,{status:'Resolved',remarks:JSON.stringify(t.remarks)});
-  // Send resolution email
-  try { const er = emailRouting[t.department]||{}; if(typeof emailjs!=='undefined' && er.to) emailjs.send('service_cpgyblm','template_lpedpsi',{to_email:er.to,cc_email:er.cc||'',ticket_id:t.id,dept:t.department,subject:t.subject,status:'Resolved',raised_by:t.raisedBy||'',priority:t.priority||'Medium',description:'Ticket has been resolved.',tenant_name:TENANT.name}).catch(()=>{}); } catch(e){}
+  saveLocal(); openDetail(id); showToast('Ticket resolved','ok');
+  sbPatch('tickets', 'ticket_id', id, {status:'Resolved', remarks: JSON.stringify(t.remarks)});
 }
 function quickEscalate(id) {
   const t = tickets.find(x=>x.id===id); if(!t)return;
   t.status='Escalated';
   if(!t.remarks)t.remarks=[];
   t.remarks.push({by:currentUser?.name||'System',at:new Date().toLocaleString('en-IN'),text:'Ticket escalated to next level.',statusChange:'Escalated'});
-  saveLocal(); openDetail(id); showToast('Ticket escalated ⚠️','ok');
-  sbPatch('tickets','ticket_id',id,{status:'Escalated',remarks:JSON.stringify(t.remarks)});
-  // Send escalation email
-  try { const er = emailRouting[t.department]||{}; if(typeof emailjs!=='undefined' && er.to) emailjs.send('service_cpgyblm','template_lpedpsi',{to_email:er.to,cc_email:er.cc||'',ticket_id:t.id,dept:t.department,subject:t.subject,status:'Escalated',raised_by:t.raisedBy||'',priority:t.priority||'Medium',description:'Ticket has been escalated to next level.',tenant_name:TENANT.name}).catch(()=>{}); } catch(e){}
+  saveLocal(); openDetail(id); showToast('Ticket escalated','ok');
+  sbPatch('tickets', 'ticket_id', id, {status:'Escalated', remarks: JSON.stringify(t.remarks)});
 }
 
 // ══ ADMIN PANEL ══
@@ -3075,12 +3048,22 @@ async function saveUser() {
   const dept  = document.getElementById('mu-dept').value;
   const pw    = document.getElementById('mu-pw').value;
   if (!name||!email||!pw) { showToast('Fill all fields','err'); return; }
-  users.push({name,email,role,dept,pw,firstLogin:true});
+  users.push({name,email,role,dept,pw});
   saveLocal(); closeModal('modal-user'); renderUsersAdmin();
   showToast('User added — they can now log in','ok');
-  // Save to Supabase users table only (auth.admin requires service_role key — not available on frontend)
+
+  // Save to Supabase DB
   await sbSync('users', {name, email, role, department: dept, password_hash: pw,
     tenant_subdomain: TENANT.subdomain, first_login: true});
+
+  // Create Supabase Auth account so they can use proper auth
+  try {
+    const sb = getSupabaseClient();
+    if (sb) {
+      await sb.auth.admin?.createUser({ email, password: pw, email_confirm: true })
+        .catch(() => {}); // admin API may not be available on anon key — silent fail
+    }
+  } catch(e) { console.warn('Auth user create:', e.message); }
 }
 function delUser(i) {
   if (!confirm('Remove this user?')) return;
@@ -3145,11 +3128,11 @@ async function saveTenant() {
   const newT = {name, subdomain:sub, email, users:users_count, color, logo, expiry, subStatus:'active'};
   tenants.push(newT); saveLocal();
 
-  // Save to Supabase — upsert on subdomain to handle re-creates
+  // Save to Supabase
   try {
     await sbFetch('tenants', {
       method:'POST',
-      headers:{'Prefer':'resolution=merge-duplicates,return=minimal','Content-Type':'application/json'},
+      headers:{'Prefer':'return=minimal','Content-Type':'application/json'},
       body: JSON.stringify({
         name, subdomain:sub, admin_email:email, user_count:users_count,
         primary_color:color, logo_url:logo||null, logo_text:name,
@@ -3206,75 +3189,30 @@ async function saveTenant() {
   // No popup — payment handled via welcome email with Razorpay button
 }
 function delTenant(i){if(!confirm('Delete tenant?'))return;tenants.splice(i,1);saveLocal();renderTenants();showToast('Tenant deleted','ok');}
-function editTenant(i) {
-  const t = tenants[i]; if (!t) return;
-  // Populate modal fields with existing tenant data
-  document.getElementById('mt-name').value  = t.name || '';
-  document.getElementById('mt-sub').value   = t.subdomain || '';
-  document.getElementById('mt-sub').disabled = true; // subdomain can't change
-  document.getElementById('mt-email').value = t.email || '';
-  document.getElementById('mt-users').value = t.users || 1;
-  document.getElementById('mt-color').value = t.color || '#1246f0';
-  document.getElementById('mt-logo').value  = t.logo || '';
-  // Change button label and store edit index
-  const btn = document.querySelector('#modal-tenant .btn-primary');
-  if (btn) { btn.textContent = 'Update Tenant →'; btn.onclick = () => updateTenant(i); }
-  document.querySelector('#modal-tenant .modal-title').textContent = 'Edit Tenant';
-  openModal('modal-tenant');
-}
-
-async function updateTenant(i) {
-  const t = tenants[i]; if (!t) return;
-  const name  = document.getElementById('mt-name').value.trim();
-  const email = document.getElementById('mt-email').value.trim();
-  const users_count = parseInt(document.getElementById('mt-users').value) || 1;
-  const color = document.getElementById('mt-color').value;
-  const logo  = document.getElementById('mt-logo').value.trim();
-  if (!name||!email) { showToast('Fill required fields','err'); return; }
-  tenants[i] = { ...t, name, email, users:users_count, color, logo };
-  saveLocal();
-  try {
-    await sbFetch('tenants?subdomain=eq.' + t.subdomain, {
-      method: 'PATCH',
-      headers: {'Content-Type':'application/json','Prefer':'return=minimal'},
-      body: JSON.stringify({ name, admin_email:email, user_count:users_count, primary_color:color, logo_url:logo||null })
-    });
-    showToast('✅ Tenant updated','ok');
-  } catch(e) { showToast('⚠️ DB update failed: ' + e.message,'err'); }
-  // Reset modal to add mode
-  document.getElementById('mt-sub').disabled = false;
-  const btn = document.querySelector('#modal-tenant .btn-primary');
-  if (btn) { btn.textContent = 'Create Tenant & Send Invoice →'; btn.onclick = saveTenant; }
-  document.querySelector('#modal-tenant .modal-title').textContent = 'Add Brand Tenant';
-  closeModal('modal-tenant'); renderTenants();
-}
+function editTenant(i){showToast('Edit feature — coming soon','ok');}
 
 function renderSubPlans() {
   const el = document.getElementById('sub-plans-display');
   if (!el) return;
   el.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <div style="font-size:14px;font-weight:600;color:var(--ink);">Subscription Plans</div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-outline btn-sm" onclick="openModal('modal-coupons');renderCouponList()">🎟️ Manage Coupons</button>
-        <button class="btn btn-primary btn-sm" onclick="openEditPlans()">Edit Plans</button>
-      </div>
+    <div style="margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;">Subscription Plans</div>
+      <div class="plan-grid" id="admin-plan-grid-main"></div>
     </div>
-    <div class="plan-grid" style="margin-bottom:16px;">${renderPlanCards()}</div>
-    <div class="card">
-      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;">Current Settings</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;">Current Settings</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
         <div><span style="color:var(--muted);">Setup Fee:</span> <strong>₹${(subPlans.setup||4999).toLocaleString()}</strong></div>
         <div><span style="color:var(--muted);">Per User/Month:</span> <strong>₹${(subPlans.perUser||499).toLocaleString()}</strong></div>
         <div><span style="color:var(--muted);">Grace Period:</span> <strong>${subPlans.graceDays||5} days</strong></div>
         <div><span style="color:var(--muted);">Payment:</span> <strong>Razorpay ✅</strong></div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:12px;">
-        <button class="btn btn-outline btn-sm" onclick="openEditPlans()">Edit Pricing</button>
-        <button class="btn btn-ghost btn-sm" onclick="openModal('modal-coupons');renderCouponList()">🎟️ Manage Coupons</button>
-      </div>
     </div>
-  `;
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="openEditPlans()">Edit Pricing</button>
+      <button class="btn btn-outline btn-sm" onclick="openModal('modal-coupons');renderCouponList()">🎟️ Manage Coupons</button>
+    </div>`;
+  renderPlanGrid('admin-plan-grid-main');
 }
 function openEditPlans() {
   document.getElementById('mp-setup').value = subPlans.setup;
@@ -3284,19 +3222,12 @@ function openEditPlans() {
   openModal('modal-plans');
 }
 function savePlans() {
-  subPlans.setup    = parseInt(document.getElementById('mp-setup').value)||4999;
-  subPlans.perUser  = parseInt(document.getElementById('mp-per-user').value)||499;
-  subPlans.graceDays= parseInt(document.getElementById('mp-grace').value)||5;
+  subPlans.setup = parseInt(document.getElementById('mp-setup').value)||4999;
+  subPlans.perUser = parseInt(document.getElementById('mp-per-user').value)||499;
+  subPlans.graceDays = parseInt(document.getElementById('mp-grace').value)||5;
   subPlans.paymentLink = document.getElementById('mp-pay-link').value.trim();
-  saveLocal(); renderSubPlans();
-  // Sync grace_days and setup_fee to all tenants in Supabase
-  sbFetch('tenants?subscription_status=eq.active', {
-    method:'PATCH',
-    headers:{'Content-Type':'application/json','Prefer':'return=minimal'},
-    body: JSON.stringify({ grace_days: subPlans.graceDays, setup_fee: subPlans.setup })
-  }).catch(()=>{});
-  closeModal('modal-plans');
-  showToast('Pricing updated ✅','ok');
+  saveLocal(); closeModal('modal-plans'); renderSubPlans();
+  showToast('Pricing updated','ok');
 }
 
 function renderMasterDepts() {
@@ -3809,18 +3740,30 @@ function showPaymentWall() {
   document.body.appendChild(wall);
 }
 
-function renderPlanCards() {
-  return PLANS.map(p => `
-    <div class="plan-card ${p.popular?'popular':''}">
-      ${p.popular?'<div class="plan-popular-badge">Most Popular</div>':''}
-      <div class="plan-name">${p.name}</div>
-      <div class="plan-tagline">${p.tagline}</div>
-      <div class="plan-price-big">₹${p.price.toLocaleString()}</div>
-      <div class="plan-price-sub">/ org / month</div>
-      <div class="plan-users">Includes ${p.users} users</div>
-      <ul class="plan-features">${p.features.map(f=>`<li>✓ ${f}</li>`).join('')}</ul>
+// ── FIX SUBSCRIPTION PLANS RENDER ────────────────────────────
+function renderSubscriptionPlansAdmin() {
+  const el = document.getElementById('sub-plans-view'); if (!el) return;
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;color:var(--ink);">Subscription Pricing</div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-plans')">Edit Plans</button>
     </div>
-  `).join('');
+    <div class="plan-grid" id="admin-plan-grid" style="margin-bottom:20px;"></div>
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
+      <button class="btn btn-outline btn-sm" onclick="openModal('modal-coupons');renderCouponList()">🎟️ Manage Coupons</button>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;">Current Settings</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
+        <div><span style="color:var(--muted);">Setup Fee:</span> <strong style="color:var(--ink);">₹${(subPlans.setup||4999).toLocaleString()}</strong> (one-time)</div>
+        <div><span style="color:var(--muted);">Per User:</span> <strong style="color:var(--ink);">₹${(subPlans.perUser||499).toLocaleString()}/month</strong></div>
+        <div><span style="color:var(--muted);">Grace Period:</span> <strong style="color:var(--ink);">${subPlans.graceDays||5} days</strong></div>
+        <div><span style="color:var(--muted);">Payment:</span> <strong style="color:var(--ink);">Razorpay</strong></div>
+      </div>
+    </div>
+  `;
+  // Render plan cards
+  renderPlanGrid('admin-plan-grid');
 }
 function toggleTheme() {
   const isLight = document.documentElement.classList.toggle('light');
@@ -3926,14 +3869,14 @@ async function saveCoupon() {
   const till = document.getElementById('cp-till').value;
   const uses = parseInt(document.getElementById('cp-uses').value) || 10;
   if (!code || !pct) { showToast('Fill code and discount %', 'err'); return; }
-  await sbSync('coupons', { code, discount_pct:pct, valid_till:till||null, max_uses:uses, active:true });
+  await sbSync('coupons', { code, discount_pct:pct, valid_till:till||null, max_uses:uses, active:true, created_by:currentUser?.email });
   showToast('Coupon ' + code + ' created ✅', 'ok');
   renderCouponList();
 }
 
 async function renderCouponList() {
   const el = document.getElementById('coupon-list'); if (!el) return;
-  const rows = await sbFetch('coupons?order=code.asc&select=*');
+  const rows = await sbFetch('coupons?order=created_at.desc&select=*');
   if (!rows || !rows.length) { el.innerHTML = '<div style="color:var(--muted);font-size:13px;">No coupons yet</div>'; return; }
   el.innerHTML = rows.map(c => `
     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--s2);border:1px solid var(--br);border-radius:8px;margin-bottom:6px;font-size:13px;">
@@ -4013,8 +3956,8 @@ function closeChat() {
 
 async function loadChatUsers() {
   try {
-    const rows = await sbFetch('users?tenant_subdomain=eq.' + TENANT.subdomain + '&select=name,email,department,role');
-    chatUsers = (rows || []).filter(u => u.email !== currentUser?.email);
+    const rows = await sbFetch('users?tenant_subdomain=eq.' + TENANT.subdomain + '&select=name,email,department,designation,mobile,can_chat,avatar_color');
+    chatUsers = (rows || []).filter(u => u.email !== currentUser?.email && u.can_chat !== false);
     renderChatList();
   } catch(e) { console.warn('Chat users:', e.message); }
 }
@@ -4178,6 +4121,8 @@ async function sendChatFile(input) {
       from_email: currentUser.email,
       message: file.name,
       file_url: urlData.publicUrl,
+      file_name: file.name,
+      file_type: file.type,
       tenant_subdomain: TENANT.subdomain,
       read: false,
       created_at: new Date().toISOString()
@@ -4347,7 +4292,7 @@ function renderTasks() {
   if (subEl) subEl.textContent = isHead ? 'Assigned by you + your tasks' : 'Tasks assigned to you';
 
   // Show assign button for heads
-  const btn = document.getElementById('btn-assign-task'); if(btn) btn.style.display = isHead ? 'flex' : 'none';
+  document.getElementById('btn-assign-task')?.classList.toggle('hidden', !isHead);
   document.getElementById('task-head-view')?.classList.toggle('hidden', !isHead);
 
   // My tasks
@@ -4563,8 +4508,8 @@ async function loadNotices() {
     noticesData = rows || [];
     renderNotices();
     // Check if user can post
-    const canPost = ['Admin','SuperAdmin','Manager'].includes(currentUser?.role);
-    const nbtn = document.getElementById('btn-post-notice'); if(nbtn) nbtn.style.display = canPost ? 'flex' : 'none';
+    const canPost = currentUser?.role === 'Admin' || currentUser?.role === 'SuperAdmin' || currentUser?.can_post_notice;
+    document.getElementById('btn-post-notice')?.classList.toggle('hidden', !canPost);
   } catch(e) { console.warn('Notices load:', e.message); }
 }
 
