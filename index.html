@@ -124,7 +124,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 /* ── SIDEBAR ── */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:236px;background:var(--s1);border-right:1px solid var(--br);display:flex;flex-direction:column;z-index:100;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--br2) transparent;transition:transform .25s ease;transform:translateX(-100%);}
 .sidebar.open{transform:translateX(0);}
-.main{margin-left:0!important;min-height:100vh;display:flex;flex-direction:column;}
+.main{margin-left:0!important;display:flex;flex-direction:column;}
 .sidebar::-webkit-scrollbar{width:4px;}
 .sidebar::-webkit-scrollbar-track{background:transparent;}
 .sidebar::-webkit-scrollbar-thumb{background:var(--br2);border-radius:2px;}
@@ -150,7 +150,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 .logout-btn:hover{color:var(--red);}
 
 /* ── MAIN ── */
-.main{min-height:100vh;display:flex;flex-direction:column;}
 .topbar{padding:13px 26px;background:var(--s1);border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;backdrop-filter:blur(8px);}
 .page-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--ink);}
 .page-sub{font-size:11.5px;color:var(--muted);margin-top:1px;}
@@ -809,7 +808,10 @@ html.light #toast{box-shadow:0 8px 32px rgba(0,0,0,0.12);}
     <div class="nav-it" onclick="nav('tickets')" id="nav-tickets">🎫 All Tickets <span class="nav-badge" id="nb-open">0</span></div>
     <div class="nav-it" onclick="nav('new-ticket')" id="nav-new-ticket">➕ Raise Ticket</div>
 
-    <div class="nav-sec">Departments</div>
+    <div class="nav-sec" onclick="toggleDeptSection()" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;">
+      <span>Departments</span>
+      <span id="dept-toggle-icon" style="font-size:10px;color:var(--muted);transition:transform .2s;">▼</span>
+    </div>
     <div id="dept-nav-items"></div>
 
     <div class="nav-sec" id="nav-admin-sec" style="display:none">Admin</div>
@@ -1275,10 +1277,19 @@ html.light #toast{box-shadow:0 8px 32px rgba(0,0,0,0.12);}
     <div id="chat-window" style="display:none;flex-direction:column;flex:1;min-height:0;overflow:hidden;">
       <div class="chat-header">
         <div class="chat-avatar" id="chat-win-avatar" style="background:#1246f0">?</div>
-        <div>
+        <div style="flex:1;min-width:0;">
           <div style="font-size:14px;font-weight:600;color:var(--ink)" id="chat-win-name">—</div>
-          <div style="font-size:11px;color:var(--muted)" id="chat-win-sub">—</div>
+          <div style="font-size:11px;color:var(--muted);cursor:pointer;" id="chat-win-sub" onclick="toggleGroupInfo()">—</div>
         </div>
+        <div id="chat-group-actions" style="display:none;gap:6px;">
+          <button class="btn btn-ghost btn-xs" onclick="toggleGroupInfo()" title="View members">👥 Members</button>
+          <button class="btn btn-ghost btn-xs" onclick="openEditGroup()" title="Edit group">✏️ Edit</button>
+        </div>
+      </div>
+      <!-- Group info panel -->
+      <div id="group-info-panel" style="display:none;background:var(--s2);border-bottom:1px solid var(--br);padding:12px 18px;">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:8px;">MEMBERS</div>
+        <div id="group-members-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
       </div>
       <div class="chat-messages" id="chat-messages-list"></div>
       <div class="chat-input-wrap">
@@ -1302,7 +1313,7 @@ html.light #toast{box-shadow:0 8px 32px rgba(0,0,0,0.12);}
 </div>
 
 <!-- ══ TASKS VIEW (inline) ══ -->
-<div id="view-tasks" class="hidden">
+<div id="view-tasks" class="hidden" style="padding:22px 26px;min-height:calc(100vh - 60px);">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
     <div>
       <div class="page-title" style="font-size:20px;">✅ Tasks</div>
@@ -1337,7 +1348,7 @@ html.light #toast{box-shadow:0 8px 32px rgba(0,0,0,0.12);}
 </div>
 
 <!-- ══ NOTICE BOARD VIEW (inline) ══ -->
-<div id="view-notices" class="hidden" style="max-width:100%;overflow-x:hidden;box-sizing:border-box;">
+<div id="view-notices" class="hidden" style="padding:22px 26px;max-width:100%;overflow-x:hidden;box-sizing:border-box;min-height:calc(100vh - 60px);">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
     <div>
       <div class="page-title" style="font-size:20px;">📋 Notice Board</div>
@@ -2189,6 +2200,7 @@ async function startApp() {
   updateTime();
   await loadAllFromSupabase();
   buildDeptNav();
+  restoreDeptSection();
   nav('dashboard');
   saveLocal();
 
@@ -2310,6 +2322,13 @@ function nav(view, dept) {
   const viewEl = document.getElementById('view-' + (view === 'dept' ? 'dept' : view));
   if (viewEl) viewEl.classList.remove('hidden');
 
+  // Always scroll to top when navigating to a new view
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  document.querySelector('.main')?.scrollTo(0, 0);
+  document.querySelector('.content')?.scrollTo(0, 0);
+
   const navEl = document.getElementById('nav-' + view);
   if (navEl) navEl.classList.add('active');
 
@@ -2329,6 +2348,23 @@ function goBack() {
 }
 
 // ══ DEPT NAV ══
+function toggleDeptSection() {
+  const el = document.getElementById('dept-nav-items');
+  const icon = document.getElementById('dept-toggle-icon');
+  if (!el) return;
+  const isHidden = el.style.display === 'none';
+  el.style.display = isHidden ? 'block' : 'none';
+  icon.textContent = isHidden ? '▼' : '▶';
+}
+
+function restoreDeptSection() {
+  // Always expanded on load — no localStorage needed
+  const el = document.getElementById('dept-nav-items');
+  const icon = document.getElementById('dept-toggle-icon');
+  if (el) el.style.display = 'block';
+  if (icon) icon.textContent = '▼';
+}
+
 function buildDeptNav() {
   const el = document.getElementById('dept-nav-items');
   const icons = {IT:'💻',Accounts:'💰',HR:'👥',Admin:'🏛️',Operations:'⚙️',Inventory:'📦',Store:'🏪',Legal:'⚖️'};
@@ -2438,22 +2474,41 @@ async function renderTaskMiniDashboard() {
 async function renderChatMiniDashboard() {
   const el = document.getElementById('dash-chat-mini'); if (!el) return;
   try {
-    const unread = await sbFetch(`chat_messages?to_email=eq.${currentUser?.email}&read=eq.false&tenant_subdomain=eq.${TENANT.subdomain}&select=from_email,message,created_at&order=created_at.desc&limit=5`);
-    const count = unread?.length || 0;
+    // Fetch recent messages involving current user (sent or received)
+    const [received, sent] = await Promise.all([
+      sbFetch(`chat_messages?to_email=eq.${currentUser?.email}&tenant_subdomain=eq.${TENANT.subdomain}&select=from_email,to_email,message,created_at,read&order=created_at.desc&limit=10`),
+      sbFetch(`chat_messages?from_email=eq.${currentUser?.email}&tenant_subdomain=eq.${TENANT.subdomain}&select=from_email,to_email,message,created_at,read&order=created_at.desc&limit=10`)
+    ]);
+    // Merge, dedupe by time, sort latest first, take top 3
+    const all = [...(received||[]), ...(sent||[])]
+      .sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+    // Unique conversations
+    const seen = new Set();
+    const recent = [];
+    for (const m of all) {
+      const peer = m.from_email === currentUser?.email ? m.to_email : m.from_email;
+      if (!seen.has(peer)) { seen.add(peer); recent.push({...m, peer}); }
+      if (recent.length >= 3) break;
+    }
+    const unreadCount = (received||[]).filter(m => !m.read).length;
+
     el.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div style="font-size:13px;font-weight:700;color:var(--ink);">💬 Chat ${count>0?`<span style="background:var(--accent);color:#fff;border-radius:10px;font-size:10px;padding:2px 7px;margin-left:4px;">${count}</span>`:''}</div>
+        <div style="font-size:13px;font-weight:700;color:var(--ink);">💬 Chat
+          ${unreadCount>0?`<span style="background:var(--accent);color:#fff;border-radius:10px;font-size:10px;padding:2px 7px;margin-left:4px;">${unreadCount} new</span>`:''}
+        </div>
         <button class="btn btn-ghost btn-xs" onclick="nav('chat')">Open Chat →</button>
       </div>
-      ${count>0 ? (unread||[]).slice(0,3).map(m=>`
-        <div style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--s3);border-radius:8px;margin-bottom:6px;cursor:pointer;" onclick="nav('chat')">
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">${m.from_email[0].toUpperCase()}</div>
+      ${recent.length > 0 ? recent.map(m => `
+        <div style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--s3);border-radius:8px;margin-bottom:6px;cursor:pointer;${!m.read && m.to_email===currentUser?.email?'border-left:2px solid var(--accent);':''}" onclick="nav('chat')">
+          <div style="width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">${(m.peer||'?')[0].toUpperCase()}</div>
           <div style="flex:1;min-width:0;">
-            <div style="font-size:11px;font-weight:600;color:var(--ink);">${m.from_email.split('@')[0]}</div>
-            <div style="font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.message?.substring(0,40)||'Attachment'}</div>
+            <div style="font-size:11px;font-weight:600;color:var(--ink);">${(m.peer||'').split('@')[0]}</div>
+            <div style="font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.message?.substring(0,45)||'📎 Attachment'}</div>
           </div>
+          <div style="font-size:10px;color:var(--muted);flex-shrink:0;">${new Date(m.created_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</div>
         </div>`).join('') :
-        '<div style="text-align:center;padding:16px;color:var(--muted);font-size:12px;">No unread messages 🎉</div>'
+        '<div style="text-align:center;padding:16px;color:var(--muted);font-size:12px;">No messages yet 💬</div>'
       }
     `;
   } catch(e) { el.innerHTML = '<div style="color:var(--muted);font-size:12px;">Chat loading...</div>'; }
@@ -4088,6 +4143,7 @@ async function toggleCoupon(id, active) {
 // ── CHAT SYSTEM ───────────────────────────────────────────────
 let chatState = { activeConv: null, convType: null, tab: 'direct', realtime: null };
 let chatUsers = [];
+let chatGroups = [];
 
 // ── EMOJI PICKER ─────────────────────────────────────────────
 const EMOJIS = ['😀','😂','😍','🥰','😊','😎','😭','😤','🤔','💪','🙏','👍','👎','❤️','🔥','✅','❌','⚠️','🎉','🚀','💡','📌','📋','⏰','🔔','💬','📧','📞','🎯','✔️','📅','💰','🏆','👋','🤝','😁','😆','😅','🤣','🙂','😉','😌','😔','😪','😴','🥺','😬','😒','😏','😞','😟','😕','🙁','☹️','😣','😖','😫','😩','🤯','😳','🥵','🥶','😱','🤗','🤭','🤫','🤥','😶','😐','😑','😬','🙄','😯','😦','😧','😮','😲','🥱','😴','🤤'];
@@ -4181,6 +4237,7 @@ async function renderChatList() {
         const members = Array.isArray(g.members) ? g.members : (typeof g.members === 'string' ? JSON.parse(g.members||'[]') : []);
         return members.includes(currentUser.email);
       });
+      chatGroups = myGroups; // store globally for edit/member access
       el.innerHTML = myGroups.map(g => {
         const members = Array.isArray(g.members) ? g.members : [];
         return `
@@ -4215,6 +4272,8 @@ async function openDirectChat(email, name) {
   const win = document.getElementById('chat-window'); win.style.display = 'flex';
   document.getElementById('chat-win-name').textContent = name;
   document.getElementById('chat-win-sub').textContent = 'Direct message';
+  document.getElementById('chat-group-actions').style.display = 'none';
+  document.getElementById('group-info-panel').style.display = 'none';
   const u = chatUsers.find(x => x.email === email);
   document.getElementById('chat-win-avatar').style.background = u?.avatar_color || '#1246f0';
   document.getElementById('chat-win-avatar').textContent = name[0].toUpperCase();
@@ -4229,13 +4288,89 @@ async function openDirectChat(email, name) {
 async function openGroupChat(groupId, nameEncoded, memberCount) {
   const name = decodeURIComponent(nameEncoded);
   chatState.activeConv = groupId; chatState.convType = 'group';
+
+  // Find the full group object to get members list
+  const group = chatGroups.find(g => g.id === groupId) || {};
+  const members = Array.isArray(group.members) ? group.members : [];
+
   document.getElementById('chat-empty-state').style.display = 'none';
   const win = document.getElementById('chat-window'); win.style.display = 'flex';
   document.getElementById('chat-win-name').textContent = name;
-  document.getElementById('chat-win-sub').textContent = memberCount + ' members';
+  document.getElementById('chat-win-sub').textContent = `${members.length || memberCount} members · tap to view`;
   document.getElementById('chat-win-avatar').style.background = '#7c3aed';
   document.getElementById('chat-win-avatar').textContent = '👥';
+
+  // Show group action buttons
+  document.getElementById('chat-group-actions').style.display = 'flex';
+
+  // Populate members panel
+  const ml = document.getElementById('group-members-list');
+  if (ml) ml.innerHTML = members.length
+    ? members.map(m => `
+        <div style="display:flex;align-items:center;gap:6px;background:var(--s3);border-radius:20px;padding:4px 10px;">
+          <div style="width:20px;height:20px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;">${m[0]?.toUpperCase()}</div>
+          <span style="font-size:11px;color:var(--ink);">${m.split('@')[0]}</span>
+        </div>`).join('')
+    : '<span style="font-size:12px;color:var(--muted);">No members found</span>';
+
+  // Hide info panel by default
+  const panel = document.getElementById('group-info-panel');
+  if (panel) panel.style.display = 'none';
+
   await loadChatMessages();
+}
+
+function toggleGroupInfo() {
+  const panel = document.getElementById('group-info-panel');
+  if (!panel) return;
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function openEditGroup() {
+  const group = chatGroups.find(g => g.id === chatState.activeConv);
+  if (!group) { showToast('Group not found','err'); return; }
+
+  // Build simple edit modal inline
+  const name = group.name || '';
+  const members = Array.isArray(group.members) ? group.members : [];
+
+  // Reuse modal-new-group if available, else create inline
+  const modal = document.getElementById('modal-edit-group');
+  if (modal) {
+    document.getElementById('egrp-name').value = name;
+    document.getElementById('egrp-members').value = members.join(', ');
+    openModal('modal-edit-group');
+    return;
+  }
+
+  // Inline prompt fallback
+  const newName = prompt('Group name:', name);
+  if (newName === null) return;
+  const newMembersRaw = prompt('Members (comma-separated emails):', members.join(', '));
+  if (newMembersRaw === null) return;
+  const newMembers = newMembersRaw.split(',').map(m=>m.trim()).filter(Boolean);
+  if (!newName.trim()) { showToast('Name required','err'); return; }
+
+  group.name = newName.trim();
+  group.members = newMembers;
+
+  sbFetch(`chat_groups?id=eq.${group.id}`, {
+    method:'PATCH',
+    headers:{'Content-Type':'application/json','Prefer':'return=minimal'},
+    body: JSON.stringify({ name: group.name, members: group.members })
+  }).then(() => {
+    showToast('Group updated ✅','ok');
+    document.getElementById('chat-win-name').textContent = group.name;
+    document.getElementById('chat-win-sub').textContent = `${group.members.length} members · tap to view`;
+    // Refresh members panel
+    const ml = document.getElementById('group-members-list');
+    if (ml) ml.innerHTML = group.members.map(m=>`
+      <div style="display:flex;align-items:center;gap:6px;background:var(--s3);border-radius:20px;padding:4px 10px;">
+        <div style="width:20px;height:20px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;">${m[0]?.toUpperCase()}</div>
+        <span style="font-size:11px;color:var(--ink);">${m.split('@')[0]}</span>
+      </div>`).join('');
+    renderChatList();
+  }).catch(e => showToast('Update failed: '+e.message,'err'));
 }
 
 async function loadChatMessages() {
@@ -4350,25 +4485,43 @@ function switchChatTab(tab) {
 }
 
 function searchChatUsers(q) {
-  const lower = q.toLowerCase();
-  if (!q) { renderChatList(); return; }
-  const filtered = chatUsers.filter(u =>
-    u.name?.toLowerCase().includes(lower) ||
-    u.email?.toLowerCase().includes(lower) ||
-    u.department?.toLowerCase().includes(lower) ||
-    u.designation?.toLowerCase().includes(lower) ||
-    u.mobile?.includes(q)
-  );
+  const lower = (q||'').toLowerCase().trim();
   const el = document.getElementById('chat-list'); if (!el) return;
-  el.innerHTML = filtered.map(u => `
-    <div class="chat-item" onclick="openDirectChat('${u.email}','${u.name}')">
-      <div class="chat-avatar" style="background:${u.avatar_color||'#1246f0'}">${u.name[0].toUpperCase()}</div>
-      <div class="chat-item-info">
-        <div class="chat-item-name">${u.name}</div>
-        <div class="chat-item-last">${u.department||''} ${u.designation?'· '+u.designation:''}</div>
+  if (!lower) { renderChatList(); return; }
+
+  if (chatState.tab === 'groups') {
+    // Search groups by name or member email
+    const filtered = chatGroups.filter(g =>
+      g.name?.toLowerCase().includes(lower) ||
+      (Array.isArray(g.members) ? g.members : []).some(m => m.toLowerCase().includes(lower))
+    );
+    el.innerHTML = filtered.map(g => {
+      const members = Array.isArray(g.members) ? g.members : [];
+      return `<div class="chat-item" onclick="openGroupChat('${g.id}','${encodeURIComponent(g.name)}',${members.length})">
+        <div class="chat-avatar" style="background:#7c3aed">👥</div>
+        <div class="chat-item-info">
+          <div class="chat-item-name">${g.name}</div>
+          <div class="chat-item-last">${members.length} members</div>
+        </div>
+      </div>`;
+    }).join('') || '<div style="padding:16px;text-align:center;color:var(--muted);font-size:12px;">No groups found</div>';
+  } else {
+    // Search direct users
+    const filtered = chatUsers.filter(u =>
+      u.name?.toLowerCase().includes(lower) ||
+      u.email?.toLowerCase().includes(lower) ||
+      u.department?.toLowerCase().includes(lower)
+    );
+    el.innerHTML = filtered.map(u => `
+      <div class="chat-item" onclick="openDirectChat('${u.email}','${u.name}')">
+        <div class="chat-avatar" style="background:#1246f0">${u.name[0].toUpperCase()}</div>
+        <div class="chat-item-info">
+          <div class="chat-item-name">${u.name}</div>
+          <div class="chat-item-last">${u.department||'Team member'}</div>
+        </div>
       </div>
-    </div>
-  `).join('') || '<div style="padding:16px;text-align:center;color:var(--muted);font-size:12px;">No results</div>';
+    `).join('') || '<div style="padding:16px;text-align:center;color:var(--muted);font-size:12px;">No results</div>';
+  }
 }
 
 let groupSelectedMembers = [];
