@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sevako Solutions — Business Technology for Indian SMEs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#040D1A;--navy2:#071528;--navy3:#0B2040;
+  --teal:#00C4A7;--teal2:#00A88E;
+  --teal-glow:rgba(0,196,167,0.18);--teal-pale:rgba(0,196,167,0.08);
+  --gold:#F5A623;
+  --white:#FFFFFF;--off:#F4F8F8;--off2:#EAF2F1;
+  --td:#0B1F2E;--tm:#3D5A6E;--ts:#7A9AAD;
+  --bl:#DDE8EC;--bd:rgba(255,255,255,0.08);
+  --sh1:0 2px 12px rgba(11,31,46,0.07);
+  --sh2:0 8px 32px rgba(11,31,46,0.10);
+  --sh3:0 20px 60px rgba(11,31,46,0.14);
+  --sht:0 8px 32px rgba(0,196,167,0.2);
+  --fh:'Syne',sans-serif;--fb:'Plus Jakarta Sans',sans-serif;
+  --r:12px;--r2:18px;--r3:24px;
+}
+html{scroll-behavior:smooth}
+body{background:#fff;color:var(--td);font-family:var(--fb);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:300;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;transition:background .3s,box-shadow .3s;background:rgba(4,13,26,0.97);backdrop-filter:blur(20px);box-shadow:0 1px 0 var(--bd)}
+.logo-mark{font-family:var(--fh);font-size:24px;font-weight:800;letter-spacing:-.5px;line-height:1}
+.logo-mark .s{color:#fff}.logo-mark .e{color:var(--teal)}
+.logo-sub{font-size:7.5px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(0,196,167,0.7);font-weight:700;margin-top:3px}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{font-size:14px;font-weight:500;color:rgba(255,255,255,0.65);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--teal)}
+.nav-cta{background:var(--teal);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--fb);transition:background .2s,transform .1s,box-shadow .2s}
+.nav-cta:hover{background:var(--teal2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,196,167,0.35)}
+
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;background:var(--navy);overflow:hidden}
+.hero-bg-img{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1800&q=80') center/cover no-repeat;opacity:0.18;pointer-events:none}
+#heroCanvas{position:absolute;inset:0;width:100%;height:100%}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,13,26,0.88) 0%,rgba(4,13,26,0.5) 60%,rgba(0,196,167,0.05) 100%)}
+.hero-inner{position:relative;z-index:2;padding:120px 5% 80px;max-width:1260px;width:100%;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+@media(max-width:960px){.hero-inner{grid-template-columns:1fr;gap:48px}.hero-r{display:none}}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(0,196,167,0.1);border:1px solid rgba(0,196,167,0.25);padding:6px 16px;border-radius:100px;margin-bottom:28px}
+.hero-tag .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-tag span{font-size:12px;font-weight:700;color:var(--teal);letter-spacing:1px;text-transform:uppercase}
+.hero h1{font-family:var(--fh);font-size:clamp(38px,5vw,68px);font-weight:800;line-height:1.05;letter-spacing:-1.5px;color:#fff;margin-bottom:22px}
+.hero h1 .ac{color:var(--teal)}.hero h1 .gd{color:var(--gold)}
+.hero-sub{font-size:17px;color:rgba(255,255,255,0.65);line-height:1.8;max-width:520px;margin-bottom:40px}
+.hero-acts{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:60px}
+.btn-teal{background:var(--teal);color:#fff;padding:14px 30px;border-radius:10px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:var(--fb);text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s}
+.btn-teal:hover{background:var(--teal2);transform:translateY(-2px);box-shadow:var(--sht)}
+.btn-ghost{background:transparent;color:#fff;padding:14px 30px;border-radius:10px;font-size:15px;font-weight:600;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;font-family:var(--fb);text-decoration:none;display:inline-block;transition:all .2s}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal);background:rgba(0,196,167,0.06)}
+.hero-stats{display:flex;gap:40px;flex-wrap:wrap}
+.hs{display:flex;flex-direction:column}
+.hs-n{font-family:var(--fh);font-size:34px;font-weight:800;color:#fff;line-height:1}
+.hs-n .ac{color:var(--teal)}
+.hs-l{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;font-weight:500}
+.dash-card{background:rgba(13,32,53,0.92);border:1px solid rgba(0,196,167,0.18);border-radius:var(--r3);padding:24px;backdrop-filter:blur(20px);box-shadow:0 32px 80px rgba(0,0,0,0.5);position:relative;margin-top:18px}
+.dash-ft{position:absolute;top:-16px;right:20px;background:var(--teal);color:#fff;font-size:11px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.5px}
+.dash-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.dash-ttl{font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1px;text-transform:uppercase}
+.dash-lv{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--teal)}
+.dash-lv-d{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:blink 2s infinite}
+.dash-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.dash-row:last-of-type{border-bottom:none}
+.dl{font-size:13.5px;color:rgba(255,255,255,0.55)}
+.dv{font-size:13.5px;font-weight:700;color:#fff}
+.dv.g{color:#34D399}
+.dash-bar-w{margin-top:18px}
+.dash-bar-l{font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);margin-bottom:7px}
+.dash-bar{height:6px;background:rgba(255,255,255,0.08);border-radius:100px;overflow:hidden}
+.dash-bar-f{height:100%;width:74%;background:linear-gradient(90deg,var(--teal),#00E5CC);border-radius:100px;animation:barf 1.2s ease}
+@keyframes barf{from{width:0}to{width:74%}}
+.dash-bar-vs{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:rgba(255,255,255,0.3)}
+.dash-bar-vs .hi{color:var(--teal);font-weight:700}
+.dash-fb{position:absolute;bottom:-18px;left:16px;background:rgba(13,32,53,0.95);border:1px solid rgba(0,196,167,0.2);border-radius:12px;padding:10px 16px;display:flex;align-items:center;gap:10px;backdrop-filter:blur(10px)}
+.dfbi{font-size:18px}
+.dfbt{font-size:12px;font-weight:700;color:#fff}
+.dfbs{font-size:11px;color:rgba(255,255,255,0.4)}
+
+.scroll-strip{background:var(--navy3);border-top:1px solid rgba(0,196,167,0.12);border-bottom:1px solid rgba(0,196,167,0.12);padding:14px 0;overflow:hidden;position:relative}
+.scroll-strip::before,.scroll-strip::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
+.scroll-strip::before{left:0;background:linear-gradient(90deg,var(--navy3),transparent)}
+.scroll-strip::after{right:0;background:linear-gradient(-90deg,var(--navy3),transparent)}
+.scroll-track{display:flex;white-space:nowrap;animation:marquee 30s linear infinite}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.si{display:inline-flex;align-items:center;gap:10px;padding:0 32px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.45);letter-spacing:.3px}
+.si .sd{width:4px;height:4px;border-radius:50%;background:var(--teal);flex-shrink:0}
+
+.trusted{background:#fff;padding:26px 5%;border-bottom:1px solid var(--bl)}
+.ti{max-width:1260px;margin:0 auto;display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.tl{font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ts);white-space:nowrap}
+.ts{width:1px;height:20px;background:var(--bl)}
+.tlogos{display:flex;gap:24px;flex-wrap:wrap}
+.tlogo{font-size:13px;font-weight:700;color:var(--ts)}
+
+section{padding:92px 5%}
+.si2{max-width:1260px;margin:0 auto}
+.lbl{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.stitle{font-family:var(--fh);font-size:clamp(28px,3.2vw,44px);font-weight:800;letter-spacing:-.8px;color:var(--td);line-height:1.1}
+.stitle.lt{color:#fff}
+.ssub{color:var(--tm);font-size:16.5px;line-height:1.8;margin-top:12px;max-width:520px}
+.ssub.lt{color:rgba(255,255,255,0.6)}
+.center{text-align:center}.center .ssub{margin-left:auto;margin-right:auto}
+
+.svc-bg{background:var(--off)}
+.svc-lay{display:grid;grid-template-columns:300px 1fr;gap:72px;align-items:start;margin-top:56px}
+@media(max-width:900px){.svc-lay{grid-template-columns:1fr;gap:32px}}
+.svc-sidebar .ssub{margin-top:14px;margin-bottom:24px}
+.slink{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--teal);text-decoration:none;transition:gap .2s}
+.slink:hover{gap:10px}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:700px){.svc-grid{grid-template-columns:1fr 1fr}}
+.svc{background:#fff;border:1px solid var(--bl);border-radius:var(--r);padding:22px 20px;transition:all .25s;position:relative;overflow:hidden}
+.svc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--gold));transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.svc:hover{border-color:rgba(0,196,167,0.3);box-shadow:var(--sh2);transform:translateY(-3px)}
+.svc:hover::after{transform:scaleX(1)}
+.svc-ico{width:42px;height:42px;background:rgba(0,196,167,0.08);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;transition:transform .3s}
+.svc:hover .svc-ico{transform:scale(1.1) rotate(-5deg)}
+.svc-name{font-weight:700;font-size:13.5px;color:var(--td);margin-bottom:5px}
+.svc-desc{font-size:12.5px;color:var(--ts);line-height:1.65}
+
+.auto-sec{background:var(--navy);position:relative;overflow:hidden}
+.auto-sec::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=70') center/cover no-repeat;opacity:0.06;pointer-events:none}
+#autoCanvas{position:absolute;inset:0;width:100%;height:100%;opacity:.35}
+.auto-inner{position:relative;z-index:2;max-width:1260px;margin:0 auto}
+.auto-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-top:56px}
+@media(max-width:900px){.auto-grid{grid-template-columns:1fr}}
+.auto-cards{display:flex;flex-direction:column;gap:14px}
+.auto-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r2);padding:20px 22px;cursor:pointer;transition:all .25s;display:flex;align-items:flex-start;gap:14px}
+.auto-card.active,.auto-card:hover{background:rgba(0,196,167,0.07);border-color:rgba(0,196,167,0.25)}
+.ac-ico{width:40px;height:40px;background:rgba(0,196,167,0.1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ac-t{font-weight:700;font-size:14.5px;color:#fff;margin-bottom:5px}
+.ac-d{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6}
+.auto-visual{background:rgba(13,32,53,0.7);border:1px solid rgba(0,196,167,0.12);border-radius:var(--r3);padding:28px;backdrop-filter:blur(12px);min-height:380px;display:flex;flex-direction:column;gap:16px}
+.av-ttl{font-size:12px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:1.5px;text-transform:uppercase;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.av-flow{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.av-step{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--r);opacity:0;transform:translateX(-12px);transition:all .4s}
+.av-step.show{opacity:1;transform:translateX(0)}
+.av-si{font-size:18px;width:36px;text-align:center;flex-shrink:0}
+.av-st{font-size:13px;color:rgba(255,255,255,0.7)}
+.av-sb{margin-left:auto;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;background:rgba(0,196,167,0.12);color:var(--teal);white-space:nowrap}
+.av-mr{display:flex;gap:12px;margin-top:8px}
+.av-m{flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:var(--r);padding:14px}
+.av-mv{font-family:var(--fh);font-size:22px;font-weight:800;color:#fff;line-height:1}
+.av-mv .ac{color:var(--teal)}
+.av-ml{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px}
+
+.how-bg{background:#fff}
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);margin-top:64px;position:relative}
+@media(max-width:768px){.how-steps{grid-template-columns:1fr 1fr}}
+.how-line{position:absolute;top:34px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent)}
+@media(max-width:768px){.how-line{display:none}}
+.step{padding:36px 20px 24px;text-align:center}
+.step-num{width:68px;height:68px;border-radius:50%;background:#fff;border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:var(--fh);font-size:20px;font-weight:800;color:var(--teal);position:relative;z-index:1;transition:all .3s;box-shadow:var(--sh1)}
+.step:hover .step-num{background:var(--teal);color:#fff;box-shadow:var(--sht)}
+.step-t{font-weight:700;font-size:15px;color:var(--td);margin-bottom:8px}
+.step-d{font-size:13px;color:var(--ts);line-height:1.7}
+
+.prod-bg{background:var(--off)}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:18px;margin-top:52px}
+.prod-card{background:#fff;border:1px solid var(--bl);border-radius:var(--r3);padding:26px;transition:all .25s;position:relative;overflow:hidden}
+.prod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal),#00E5CC);opacity:0;transition:opacity .3s}
+.prod-card:hover{border-color:rgba(0,196,167,0.3);transform:translateY(-4px);box-shadow:var(--sh3)}
+.prod-card:hover::before{opacity:1}
+.prod-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.prod-ico{width:48px;height:48px;background:rgba(0,196,167,0.08);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.prod-badge{font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;padding:3px 10px;border-radius:100px}
+.b-live{background:#D1FAE5;color:#059669}
+.b-beta{background:#FEF3C7;color:#B45309}
+.b-new{background:rgba(0,196,167,0.1);color:var(--teal)}
+.prod-name{font-family:var(--fh);font-size:18px;font-weight:800;color:var(--td);margin-bottom:3px}
+.prod-tg{font-size:10.5px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.prod-desc{font-size:13px;color:var(--tm);line-height:1.7;margin-bottom:14px}
+.prod-feats{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.prod-feats li{font-size:12.5px;color:var(--tm);display:flex;align-items:flex-start;gap:7px}
+.prod-feats li::before{content:'checkmark';font-size:0;width:14px;height:14px;background:rgba(0,196,167,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;position:relative}
+.prod-feats li::before{content:'✓';font-size:10px;color:var(--teal);font-weight:800;width:auto;height:auto;background:none;border-radius:0;margin-top:3px}
+.prod-cta{font-size:13px;font-weight:700;color:var(--teal);background:none;border:none;cursor:pointer;font-family:var(--fb);padding:0;display:inline-flex;align-items:center;gap:5px;transition:gap .2s}
+.prod-card:hover .prod-cta{gap:9px}
+
+.ind-bg{background:#fff}
+.ind-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-top:50px}
+@media(max-width:800px){.ind-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:500px){.ind-grid{grid-template-columns:repeat(2,1fr)}}
+.ind-chip{background:var(--off);border:1px solid var(--bl);border-radius:var(--r);padding:22px 14px;text-align:center;transition:all .25s;opacity:0;transform:translateY(14px)}
+.ind-grid.vis .ind-chip{animation:chipIn .45s ease forwards}
+@keyframes chipIn{to{opacity:1;transform:translateY(0)}}
+.ind-chip:hover{border-color:rgba(0,196,167,0.35);background:rgba(0,196,167,0.05);transform:translateY(-3px);box-shadow:var(--sh1)}
+.ind-ico{font-size:26px;margin-bottom:9px;display:block;transition:transform .3s}
+.ind-chip:hover .ind-ico{transform:scale(1.15)}
+.ind-name{font-size:12px;font-weight:600;color:var(--ts);transition:color .2s}
+.ind-chip:hover .ind-name{color:var(--teal)}
+
+.why-bg{background:var(--off)}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px}
+@media(max-width:768px){.why-grid{grid-template-columns:1fr}}
+.why-card{background:#fff;border:1px solid var(--bl);border-radius:var(--r3);padding:28px;transition:all .25s}
+.why-card:hover{box-shadow:var(--sh2);transform:translateY(-3px)}
+.why-ico{width:48px;height:48px;background:rgba(0,196,167,0.08);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.why-t{font-weight:700;font-size:15px;color:var(--td);margin-bottom:8px}
+.why-d{font-size:13.5px;color:var(--tm);line-height:1.7}
+
+.cta-bg{background:var(--navy);position:relative;overflow:hidden;padding:90px 5%;text-align:center}
+.cta-bg::before{content:'';position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:700px;height:600px;background:radial-gradient(ellipse,rgba(0,196,167,0.12) 0%,transparent 70%);pointer-events:none}
+.cta-bg h2{font-family:var(--fh);font-size:clamp(28px,4vw,46px);font-weight:800;color:#fff;letter-spacing:-.8px;margin-bottom:14px;position:relative}
+.cta-bg h2 .ac{color:var(--teal)}
+.cta-bg p{color:rgba(255,255,255,0.55);font-size:17px;margin-bottom:38px;max-width:440px;margin-left:auto;margin-right:auto;position:relative}
+.cta-acts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+.btn-w{background:#fff;color:var(--teal);padding:13px 30px;border-radius:10px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:var(--fb);text-decoration:none;display:inline-block;transition:all .2s}
+.btn-w:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,255,255,0.1)}
+.btn-gw{background:transparent;color:#fff;padding:13px 30px;border-radius:10px;font-size:15px;font-weight:600;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;font-family:var(--fb);text-decoration:none;display:inline-block;transition:all .2s}
+.btn-gw:hover{border-color:var(--teal);color:var(--teal)}
+.cta-em{margin-top:20px;font-size:13px;color:rgba(255,255,255,0.35);position:relative}
+.cta-em a{color:var(--teal);text-decoration:none;font-weight:600}
+
+footer{background:var(--navy2);padding:56px 5% 36px;border-top:1px solid rgba(255,255,255,0.04)}
+.ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:44px;max-width:1260px;margin-left:auto;margin-right:auto}
+@media(max-width:768px){.ft-top{grid-template-columns:1fr 1fr;gap:28px}}
+.ft-about p{font-size:13px;color:rgba(255,255,255,0.35);line-height:1.75;margin-top:10px;max-width:230px}
+.fc h4{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:14px}
+.fc ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.fc ul a{font-size:13px;color:rgba(255,255,255,0.45);text-decoration:none;transition:color .2s}
+.fc ul a:hover{color:var(--teal)}
+.ft-bot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:26px;border-top:1px solid rgba(255,255,255,0.05);max-width:1260px;margin:0 auto}
+.ft-copy{font-size:12px;color:rgba(255,255,255,0.25)}
+.ft-ind{font-size:12px;color:rgba(255,255,255,0.25)}
+.ft-ind span{color:var(--teal)}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(4,13,26,0.75);z-index:400;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:var(--r3);padding:40px;max-width:600px;width:100%;position:relative;max-height:90vh;overflow-y:auto;box-shadow:0 40px 100px rgba(0,0,0,0.4)}
+.mcl{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--ts);font-size:24px;cursor:pointer;line-height:1;transition:color .2s}
+.mcl:hover{color:var(--td)}
+.modal h2{font-family:var(--fh);font-size:24px;font-weight:800;color:var(--td);margin-bottom:6px}
+.m-sub{font-size:14px;color:var(--ts);margin-bottom:26px}
+.m-sub a{color:var(--teal);text-decoration:none}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:500px){.frow{grid-template-columns:1fr}}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.fg label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tm)}
+.fg input,.fg select,.fg textarea{background:var(--off);border:1.5px solid var(--bl);color:var(--td);padding:11px 14px;border-radius:8px;font-size:14px;font-family:var(--fb);outline:none;transition:border-color .2s}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--ts)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--teal);background:#fff}
+.fg textarea{resize:vertical;min-height:88px;line-height:1.6}
+#subBtn{background:var(--teal);color:#fff;border:none;padding:13px 28px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--fb);min-width:160px;transition:all .2s;margin-top:6px}
+#subBtn:hover:not(:disabled){background:var(--teal2);transform:translateY(-1px)}
+#subBtn:disabled{opacity:.6;cursor:not-allowed}
+.smsg{font-size:13px;margin-top:10px;min-height:18px}
+.smsg.e{color:#DC2626}.smsg.ok{color:var(--teal)}
+.f-success{display:none;text-align:center;padding:20px 0}
+.s-ico{width:72px;height:72px;background:rgba(0,196,167,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:32px}
+.f-success h3{font-family:var(--fh);font-size:22px;font-weight:800;color:var(--teal);margin-bottom:10px}
+.f-success p{font-size:14px;color:var(--tm);line-height:1.75}
+.s-box{background:var(--off);border:1px solid var(--bl);border-radius:var(--r);padding:16px 20px;margin:16px 0;text-align:left}
+.s-box p{font-size:13px;color:var(--tm);line-height:1.7}
+.cl-btn{background:var(--teal);color:#fff;border:none;padding:11px 30px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--fb);margin-top:14px;transition:background .2s}
+.cl-btn:hover{background:var(--teal2)}
+.fade-up{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+@media(max-width:768px){.nav-links{display:none}.ft-top{grid-template-columns:1fr}.modal{padding:24px}}
+
+.ins-card{background:#fff;border:1px solid var(--bl);border-radius:var(--r3);overflow:hidden;transition:all .25s;box-shadow:var(--sh1)}
+.ins-card:hover{transform:translateY(-5px);box-shadow:var(--sh3);border-color:rgba(0,196,167,0.25)}
+.ins-img{height:200px;background-size:cover;background-position:center;position:relative}
+.ins-img-ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,13,26,0.2),rgba(4,13,26,0.55))}
+.ins-cat{position:absolute;top:14px;left:14px;background:var(--teal);color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:.8px;text-transform:uppercase;z-index:1}
+.ins-body{padding:22px}
+.ins-title{font-family:var(--fh);font-size:16px;font-weight:800;color:var(--td);line-height:1.35;margin-bottom:10px}
+.ins-desc{font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:16px}
+.ins-link{font-size:13px;font-weight:700;color:var(--teal);background:none;border:none;cursor:pointer;font-family:var(--fb);padding:0;display:inline-flex;align-items:center;gap:5px;transition:gap .2s}
+.ins-card:hover .ins-link{gap:9px}
+@media(max-width:768px){.ins-card-grid{grid-template-columns:1fr!important}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div>
+    <div class="logo-mark"><span class="s">Sev</span><span class="e">ako</span></div>
+    <div class="logo-sub">Your Vision. Our Technology.</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#automation">Automation</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#industries">Industries</a></li>
+    <li><a href="#why">Why Us</a></li>
+  </ul>
+  <button class="nav-cta" onclick="openModal()">Get a Demo</button>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-bg-img"></div>
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-ov"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag"><span class="dot"></span><span>Business Technology for Indian SMEs</span></div>
+      <h1>Automate Your<br><span class="ac">Business.</span><br>Scale with <span class="gd">Confidence.</span></h1>
+      <p class="hero-sub">From custom apps to live dashboards — we build the technology backbone that lets Indian businesses run smarter, faster, and without the manual grind.</p>
+      <div class="hero-acts">
+        <a href="#products" class="btn-teal">Explore Products &#x2192;</a>
+        <button class="btn-ghost" onclick="openModal()">Send Enquiry</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hs"><div class="hs-n">50<span class="ac">+</span></div><div class="hs-l">Businesses Automated</div></div>
+        <div class="hs"><div class="hs-n">12<span class="ac">+</span></div><div class="hs-l">In-House Products</div></div>
+        <div class="hs"><div class="hs-n">48<span class="ac">hr</span></div><div class="hs-l">Avg. Go-Live Time</div></div>
+        <div class="hs"><div class="hs-n">&#x20B9;<span class="ac">0</span></div><div class="hs-l">Setup Fee</div></div>
+      </div>
+    </div>
+    <div class="hero-r">
+      <div style="position:relative;margin-top:18px;margin-bottom:20px">
+        <div class="dash-card">
+          <div class="dash-ft">Live Dashboard</div>
+          <div class="dash-hd">
+            <div class="dash-ttl">Operations Overview &#x2014; Today</div>
+            <div class="dash-lv"><div class="dash-lv-d"></div>Live</div>
+          </div>
+          <div class="dash-row"><span class="dl">Total Revenue</span><span class="dv g">&#x20B9;1,24,850</span></div>
+          <div class="dash-row"><span class="dl">Tickets Resolved</span><span class="dv">47 / 51</span></div>
+          <div class="dash-row"><span class="dl">Staff Attendance</span><span class="dv g">94.2%</span></div>
+          <div class="dash-row"><span class="dl">Pending Approvals</span><span class="dv">3</span></div>
+          <div class="dash-bar-w">
+            <div class="dash-bar-l">Monthly Target Achievement</div>
+            <div class="dash-bar"><div class="dash-bar-f"></div></div>
+            <div class="dash-bar-vs"><span>0%</span><span class="hi">74% achieved</span><span>100%</span></div>
+          </div>
+        </div>
+        <div class="dash-fb">
+          <div class="dfbi">&#x2705;</div>
+          <div><div class="dfbt">All systems live</div><div class="dfbs">Syncing in real-time</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="scroll-strip">
+  <div class="scroll-track">
+    <span class="si"><span class="sd"></span>SQL Server Analytics</span>
+    <span class="si"><span class="sd"></span>Razorpay Integration</span>
+    <span class="si"><span class="sd"></span>WhatsApp Business API</span>
+    <span class="si"><span class="sd"></span>Google Apps Script</span>
+    <span class="si"><span class="sd"></span>Cloudflare Workers</span>
+    <span class="si"><span class="sd"></span>Supabase Backend</span>
+    <span class="si"><span class="sd"></span>GST Portal Sync</span>
+    <span class="si"><span class="sd"></span>Tally ERP Integration</span>
+    <span class="si"><span class="sd"></span>AI-Powered Dashboards</span>
+    <span class="si"><span class="sd"></span>Multi-Branch Reports</span>
+    <span class="si"><span class="sd"></span>Zenoti POS API</span>
+    <span class="si"><span class="sd"></span>GitHub Pages Deploy</span>
+    <span class="si"><span class="sd"></span>SQL Server Analytics</span>
+    <span class="si"><span class="sd"></span>Razorpay Integration</span>
+    <span class="si"><span class="sd"></span>WhatsApp Business API</span>
+    <span class="si"><span class="sd"></span>Google Apps Script</span>
+    <span class="si"><span class="sd"></span>Cloudflare Workers</span>
+    <span class="si"><span class="sd"></span>Supabase Backend</span>
+    <span class="si"><span class="sd"></span>GST Portal Sync</span>
+    <span class="si"><span class="sd"></span>Tally ERP Integration</span>
+    <span class="si"><span class="sd"></span>AI-Powered Dashboards</span>
+    <span class="si"><span class="sd"></span>Multi-Branch Reports</span>
+    <span class="si"><span class="sd"></span>Zenoti POS API</span>
+    <span class="si"><span class="sd"></span>GitHub Pages Deploy</span>
+  </div>
+</div>
+
+<div class="trusted">
+  <div class="ti">
+    <div class="tl">Trusted by</div>
+    <div class="ts"></div>
+    <div class="tlogos">
+      <div class="tlogo">JCB Bounce</div>
+      <div class="tlogo">Big&#xFC;ine India</div>
+      <div class="tlogo">Spalon</div>
+      <div class="tlogo">Multi-brand Salon Chains</div>
+      <div class="tlogo">Retail SMEs across India</div>
+    </div>
+  </div>
+</div>
+
+<section id="services" class="svc-bg">
+  <div class="si2">
+    <div class="svc-lay">
+      <div class="svc-sidebar fade-up">
+        <p class="lbl">What We Do</p>
+        <h2 class="stitle">End-to-end tech for Indian businesses</h2>
+        <p class="ssub">We understand your operations and build systems that save real time and money &#x2014; no bloat, no fluff, no vendor lock-in.</p>
+        <a href="#contact" class="slink" onclick="openModal();return false;">Talk to us about your problem &#x2192;</a>
+      </div>
+      <div class="svc-grid fade-up">
+        <div class="svc"><div class="svc-ico">&#x1F50C;</div><div class="svc-name">API Integration</div><p class="svc-desc">POS, CRM, ERP, Razorpay, WhatsApp, GST portals &#x2014; any API connected seamlessly.</p></div>
+        <div class="svc"><div class="svc-ico">&#x1F5A5;&#xFE0F;</div><div class="svc-name">Web App Development</div><p class="svc-desc">Fast, lean web apps &#x2014; single-file tools or full-stack platforms on any device.</p></div>
+        <div class="svc"><div class="svc-ico">&#x1F4F1;</div><div class="svc-name">Custom App Creation</div><p class="svc-desc">Dashboards, trackers, commission tools, complaint portals &#x2014; your workflow.</p></div>
+        <div class="svc"><div class="svc-ico">&#x1F4CA;</div><div class="svc-name">Reports Automation</div><p class="svc-desc">Scheduled management reports to your inbox &#x2014; PDF or email, daily or weekly.</p></div>
+        <div class="svc"><div class="svc-ico">&#x1F4AC;</div><div class="svc-name">WhatsApp &amp; Email Bots</div><p class="svc-desc">Trigger-based notifications, reminders, follow-ups, and bulk broadcasts.</p></div>
+        <div class="svc"><div class="svc-ico">&#x1F5C4;&#xFE0F;</div><div class="svc-name">Data Analytics &amp; SQL</div><p class="svc-desc">Advanced SQL, pivot reports, customer behavior analysis, cross-sell insights.</p></div>
+        <div class="svc"><div class="svc-ico">&#x2601;&#xFE0F;</div><div class="svc-name">Google Workspace Automation</div><p class="svc-desc">Sheets as database, Apps Script pipelines &#x2014; enterprise results at zero infra cost.</p></div>
+        <div class="svc"><div class="svc-ico">&#x1F517;</div><div class="svc-name">Franchise Tech</div><p class="svc-desc">Roll-up dashboards, center comparisons, tenant access control for chains.</p></div>
+        <div class="svc"><div class="svc-ico">&#x1F310;</div><div class="svc-name">Website &amp; Landing Pages</div><p class="svc-desc">Fast, SEO-optimised sites on custom domains &#x2014; zero hosting headache.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="automation" class="auto-sec">
+  <canvas id="autoCanvas"></canvas>
+  <div class="auto-inner fade-up">
+    <div class="center">
+      <p class="lbl">Live Automation</p>
+      <h2 class="stitle lt">See your operations run themselves</h2>
+      <p class="ssub lt">Every product we build is a live, breathing automation &#x2014; not a static report.</p>
+    </div>
+    <div class="auto-grid">
+      <div class="auto-cards">
+        <div class="auto-card active" onclick="switchAuto(0,this)">
+          <div class="ac-ico">&#x1F4E5;</div>
+          <div><div class="ac-t">Sales Data &#x2192; Reports &#x2192; Inbox</div><div class="ac-d">POS data captured, cleaned, and emailed to management every morning before 8AM.</div></div>
+        </div>
+        <div class="auto-card" onclick="switchAuto(1,this)">
+          <div class="ac-ico">&#x1F3AB;</div>
+          <div><div class="ac-t">Complaint &#x2192; Assignment &#x2192; Resolution</div><div class="ac-d">Customer complaint logs auto-assigned to agents, escalated on SLA breach, closed with audit trail.</div></div>
+        </div>
+        <div class="auto-card" onclick="switchAuto(2,this)">
+          <div class="ac-ico">&#x1F465;</div>
+          <div><div class="ac-t">Attendance &#x2192; Payroll &#x2192; Tally</div><div class="ac-d">Punch data flows into payroll calculator, deductions applied, exported to Tally in one click.</div></div>
+        </div>
+        <div class="auto-card" onclick="switchAuto(3,this)">
+          <div class="ac-ico">&#x1F4B3;</div>
+          <div><div class="ac-t">Payment &#x2192; GST Invoice &#x2192; WhatsApp</div><div class="ac-d">Razorpay payment triggers GST invoice generation and WhatsApp delivery in under 3 seconds.</div></div>
+        </div>
+      </div>
+      <div class="auto-visual">
+        <div class="av-ttl" id="avTitle">FLOW: DAILY SALES &#x2192; EMAIL DIGEST</div>
+        <div class="av-flow" id="avFlow"></div>
+        <div class="av-mr" id="avMetrics"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-bg">
+  <div class="si2">
+    <div class="center fade-up">
+      <p class="lbl">The Process</p>
+      <h2 class="stitle">Simple. Fast. Delivered.</h2>
+      <p class="ssub">Most projects go live in 48&#x2013;72 hours. Complex platforms in 1&#x2013;2 weeks.</p>
+    </div>
+    <div class="how-steps fade-up">
+      <div class="how-line"></div>
+      <div class="step"><div class="step-num">01</div><div class="step-t">Discovery Call</div><p class="step-d">30 minutes to understand your business, pain points, and data flows.</p></div>
+      <div class="step"><div class="step-num">02</div><div class="step-t">Solution Design</div><p class="step-d">We map exact tools, integrations, and automation logic &#x2014; no scope creep.</p></div>
+      <div class="step"><div class="step-num">03</div><div class="step-t">Build &amp; Integrate</div><p class="step-d">Most tools live in 48&#x2013;72 hours. Complex platforms in 1&#x2013;2 weeks.</p></div>
+      <div class="step"><div class="step-num">04</div><div class="step-t">Support &amp; Iterate</div><p class="step-d">Ongoing support, upgrades, and new features as your business grows.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="products" class="prod-bg">
+  <div class="si2">
+    <div class="center fade-up">
+      <p class="lbl">In-House Products</p>
+      <h2 class="stitle">Ready-to-deploy solutions</h2>
+      <p class="ssub">Battle-tested products built from real operations. Go live in hours.</p>
+    </div>
+    <div class="prod-grid fade-up">
+      <div class="prod-card"><div class="prod-top"><div class="prod-ico">&#x1F6CD;&#xFE0F;</div><span class="prod-badge b-live">Live</span></div><div class="prod-name">SevakoPOS</div><div class="prod-tg">Retail Point of Sale</div><p class="prod-desc">Fast, offline-capable POS for retail stores. Barcode scanning, GST billing, and daily reconciliation.</p><ul class="prod-feats"><li>GST-compliant invoice generation</li><li>Barcode / QR product lookup</li><li>Real-time inventory deduction</li><li>Multi-payment mode support</li></ul><button class="prod-cta" onclick="openModal()">Request Demo &#x2192;</button></div>
+      <div class="prod-card"><div class="prod-top"><div class="prod-ico">&#x2702;&#xFE0F;</div><span class="prod-badge b-live">Live</span></div><div class="prod-name">SalonOS</div><div class="prod-tg">Salon &amp; Spa POS</div><p class="prod-desc">Purpose-built for salon chains. Appointments, commissions, memberships, multi-branch reporting.</p><ul class="prod-feats"><li>Stylist-wise commission calculator</li><li>Prebooking &amp; appointment calendar</li><li>Membership &amp; loyalty tracking</li><li>Center performance comparison</li></ul><button class="prod-cta" onclick="openModal()">Request Demo &#x2192;</button></div>
+      <div class="prod-card"><div class="prod-top"><div class="prod-ico">&#x1F3AB;</div><span class="prod-badge b-live">Live</span></div><div class="prod-name">Sevako Helpdesk</div><div class="prod-tg">Multi-tenant Support Portal</div><p class="prod-desc">White-label helpdesk SaaS with branded subdomains, role-based access, and email notifications.</p><ul class="prod-feats"><li>Custom subdomain branding</li><li>Role-based access control</li><li>SLA tracking &amp; escalation rules</li><li>Instant email alerts on tickets</li></ul><button class="prod-cta" onclick="openModal()">Request Demo &#x2192;</button></div>
+      <div class="prod-card"><div class="prod-top"><div class="prod-ico">&#x1F4C8;</div><span class="prod-badge b-new">New</span></div><div class="prod-name">RevTracker</div><div class="prod-tg">Sales Analytics Dashboard</div><p class="prod-desc">Live revenue dashboards for multi-branch businesses. Excel upload or direct POS connect.</p><ul class="prod-feats"><li>Multi-center performance grid</li><li>ABV, footfall &amp; conversion metrics</li><li>Automated email digest</li><li>Google Sheets sync</li></ul><button class="prod-cta" onclick="openModal()">Request Demo &#x2192;</button></div>
+      <div class="prod-card"><div class="prod-top"><div class="prod-ico">&#x1F465;</div><span class="prod-badge b-new">New</span></div><div class="prod-name">StaffSync</div><div class="prod-tg">HR, Attendance &amp; Payroll</div><p class="prod-desc">Manage staff across locations. Attendance, leave, shift scheduling, and payroll export.</p><ul class="prod-feats"><li>Geo-tagged attendance punch</li><li>Commission &amp; incentive calculation</li><li>Payslip PDF generator</li><li>Tally / Excel payroll export</li></ul><button class="prod-cta" onclick="openModal()">Request Demo &#x2192;</button></div>
+      <div class="prod-card"><div class="prod-top"><div class="prod-ico">&#x1F4E6;</div><span class="prod-badge b-live">Live</span></div><div class="prod-name">AssetTrack</div><div class="prod-tg">Asset Management</div><p class="prod-desc">Track every asset across locations. Assignment, depreciation, and audit trails included.</p><ul class="prod-feats"><li>QR-tagged asset registry</li><li>Depreciation calculator (SLM/WDV)</li><li>AMC &amp; maintenance alerts</li><li>Multi-location asset map</li></ul><button class="prod-cta" onclick="openModal()">Request Demo &#x2192;</button></div>
+      <div class="prod-card"><div class="prod-top"><div class="prod-ico">&#x2705;</div><span class="prod-badge b-beta">Beta</span></div><div class="prod-name">TaskFlow</div><div class="prod-tg">Internal Task &amp; Workflow</div><p class="prod-desc">Manage daily operations, approvals, and recurring checklists with full audit history.</p><ul class="prod-feats"><li>Kanban &amp; list views</li><li>Approval workflow builder</li><li>Priority &amp; SLA management</li><li>WhatsApp notification triggers</li></ul><button class="prod-cta" onclick="openModal()">Request Demo &#x2192;</button></div>
+      <div class="prod-card"><div class="prod-top"><div class="prod-ico">&#x1F9FE;</div><span class="prod-badge b-live">Live</span></div><div class="prod-name">BillForge</div><div class="prod-tg">Universal Bill Generator</div><p class="prod-desc">Generate any business bill &#x2014; GST invoices, proforma, challans &#x2014; PDF output, custom branding.</p><ul class="prod-feats"><li>GST / non-GST invoice types</li><li>Thermal &amp; A4 print formats</li><li>Auto sequential bill numbering</li><li>Works offline &#x2014; no server needed</li></ul><button class="prod-cta" onclick="openModal()">Request Demo &#x2192;</button></div>
+      <div class="prod-card"><div class="prod-top"><div class="prod-ico">&#x1F91D;</div><span class="prod-badge b-new">New</span></div><div class="prod-name">LeadNest</div><div class="prod-tg">CRM &amp; Lead Management</div><p class="prod-desc">Simple CRM for Indian SMEs. Capture leads from WhatsApp or walkins. Never lose a prospect.</p><ul class="prod-feats"><li>WhatsApp lead capture integration</li><li>Pipeline kanban board</li><li>Automated follow-up reminders</li><li>Sales team performance report</li></ul><button class="prod-cta" onclick="openModal()">Request Demo &#x2192;</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="industries" class="ind-bg">
+  <div class="si2">
+    <div class="center fade-up">
+      <p class="lbl">Industries We Serve</p>
+      <h2 class="stitle">Built for businesses like yours</h2>
+    </div>
+    <div class="ind-grid fade-up">
+      <div class="ind-chip"><span class="ind-ico">&#x2702;&#xFE0F;</span><div class="ind-name">Salon &amp; Spa</div></div>
+      <div class="ind-chip"><span class="ind-ico">&#x1F6CD;&#xFE0F;</span><div class="ind-name">Retail Stores</div></div>
+      <div class="ind-chip"><span class="ind-ico">&#x1F37D;&#xFE0F;</span><div class="ind-name">Food &amp; Beverage</div></div>
+      <div class="ind-chip"><span class="ind-ico">&#x1F3E5;</span><div class="ind-name">Clinics &amp; Wellness</div></div>
+      <div class="ind-chip"><span class="ind-ico">&#x1F3D7;&#xFE0F;</span><div class="ind-name">Real Estate</div></div>
+      <div class="ind-chip"><span class="ind-ico">&#x1F3EB;</span><div class="ind-name">Education</div></div>
+      <div class="ind-chip"><span class="ind-ico">&#x1F3ED;</span><div class="ind-name">Manufacturing</div></div>
+      <div class="ind-chip"><span class="ind-ico">&#x1F697;</span><div class="ind-name">Auto &amp; Services</div></div>
+      <div class="ind-chip"><span class="ind-ico">&#x1F4BC;</span><div class="ind-name">Professional Services</div></div>
+      <div class="ind-chip"><span class="ind-ico">&#x1F3EA;</span><div class="ind-name">Franchise Chains</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="why" class="why-bg">
+  <div class="si2">
+    <div class="center fade-up">
+      <p class="lbl">Why Sevako</p>
+      <h2 class="stitle">Built different. For India.</h2>
+      <p class="ssub">We've automated real businesses &#x2014; not theoretical demos. That experience is baked into every product.</p>
+    </div>
+    <div class="why-grid fade-up">
+      <div class="why-card"><div class="why-ico">&#x26A1;</div><div class="why-t">48-Hour Go-Live</div><p class="why-d">Most tools are live in 2 days. We don't keep your team waiting weeks for a working product.</p></div>
+      <div class="why-card"><div class="why-ico">&#x1F1EE;&#x1F1F3;</div><div class="why-t">India-First by Design</div><p class="why-d">GST, Razorpay, WhatsApp, Tally, UPI &#x2014; built around Indian business reality, not adapted from elsewhere.</p></div>
+      <div class="why-card"><div class="why-ico">&#x1F512;</div><div class="why-t">Your Data, Your Control</div><p class="why-d">No third-party SaaS lock-in. Your data lives in your own Supabase, Google Sheets, or SQL Server.</p></div>
+      <div class="why-card"><div class="why-ico">&#x1F4D0;</div><div class="why-t">Zero Bloat Philosophy</div><p class="why-d">Lean stacks, no unnecessary frameworks. Faster to load, cheaper to host, easier to maintain.</p></div>
+      <div class="why-card"><div class="why-ico">&#x1F91D;</div><div class="why-t">Relationship, Not Tickets</div><p class="why-d">Direct access to the people who built your product. WhatsApp us and we respond.</p></div>
+      <div class="why-card"><div class="why-ico">&#x1F4C8;</div><div class="why-t">Grows With You</div><p class="why-d">Start with one tool, scale to a full operations platform as your business expands.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHT CARDS (Kyndryl style) -->
+<section style="background:#fff;padding:88px 5%">
+  <div style="max-width:1260px;margin:0 auto">
+    <div class="center fade-up">
+      <p class="lbl">Insights &amp; Innovation</p>
+      <h2 class="stitle">Ideas that drive transformation</h2>
+      <p class="ssub">Real automation stories and technology thinking from the Sevako team.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px" class="fade-up">
+
+      <div class="ins-card">
+        <div class="ins-img" style="background-image:url('https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80')">
+          <div class="ins-img-ov"></div>
+          <span class="ins-cat">Automation</span>
+        </div>
+        <div class="ins-body">
+          <div class="ins-title">How we automated daily sales reports for 28 salon centers</div>
+          <p class="ins-desc">From manual Excel to fully automated morning email digests — zero human intervention, 100% accuracy.</p>
+          <button class="ins-link" onclick="openModal()">Read more &#x2192;</button>
+        </div>
+      </div>
+
+      <div class="ins-card">
+        <div class="ins-img" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80')">
+          <div class="ins-img-ov"></div>
+          <span class="ins-cat">Analytics</span>
+        </div>
+        <div class="ins-body">
+          <div class="ins-title">Building a live multi-branch revenue dashboard in 48 hours</div>
+          <p class="ins-desc">ABV, footfall, MTD targets — all live on one screen, updated every hour from POS data.</p>
+          <button class="ins-link" onclick="openModal()">Read more &#x2192;</button>
+        </div>
+      </div>
+
+      <div class="ins-card">
+        <div class="ins-img" style="background-image:url('https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=800&q=80')">
+          <div class="ins-img-ov"></div>
+          <span class="ins-cat">Integration</span>
+        </div>
+        <div class="ins-body">
+          <div class="ins-title">Razorpay to GST invoice to WhatsApp — in under 3 seconds</div>
+          <p class="ins-desc">A webhook-triggered pipeline that handles billing, archiving and customer notification automatically.</p>
+          <button class="ins-link" onclick="openModal()">Read more &#x2192;</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SPLIT FEATURE SECTION (Kyndryl style) -->
+<section style="background:var(--navy);padding:92px 5%;position:relative;overflow:hidden">
+  <div style="max-width:1260px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center" class="fade-up">
+    <div>
+      <p class="lbl">Our Approach</p>
+      <h2 class="stitle lt">We run your operations<br>from the inside</h2>
+      <p class="ssub lt" style="margin-top:16px">Just like Kyndryl runs critical systems for global enterprises, Sevako runs the operational backbone of Indian SMEs — attendance, payroll, billing, complaints, analytics — all in one connected system.</p>
+      <div style="display:flex;flex-direction:column;gap:16px;margin-top:36px">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div style="width:36px;height:36px;background:rgba(0,196,167,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">&#x26A1;</div>
+          <div><div style="font-weight:700;font-size:15px;color:#fff;margin-bottom:4px">Real-time data, not end-of-day reports</div><div style="font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.65">Your managers see live numbers — not yesterday's Excel file forwarded at midnight.</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div style="width:36px;height:36px;background:rgba(0,196,167,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">&#x1F517;</div>
+          <div><div style="font-weight:700;font-size:15px;color:#fff;margin-bottom:4px">Every system connected to every other</div><div style="font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.65">POS &#x2192; payroll &#x2192; Tally &#x2192; WhatsApp. One action cascades across your entire business.</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div style="width:36px;height:36px;background:rgba(0,196,167,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">&#x1F30F;</div>
+          <div><div style="font-weight:700;font-size:15px;color:#fff;margin-bottom:4px">Built for Indian compliance</div><div style="font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.65">GST, TDS, PF, ESI — every regulation baked in. Not a workaround. Not an add-on.</div></div>
+        </div>
+      </div>
+      <button class="btn-teal" style="margin-top:36px" onclick="openModal()">See how it works &#x2192;</button>
+    </div>
+    <div style="position:relative;border-radius:20px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.5)">
+      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=85" alt="Business analytics dashboard" style="width:100%;height:380px;object-fit:cover;display:block">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,196,167,0.15),transparent)"></div>
+      <div style="position:absolute;bottom:20px;left:20px;right:20px;background:rgba(13,32,53,0.9);border:1px solid rgba(0,196,167,0.2);border-radius:12px;padding:16px 20px;backdrop-filter:blur(10px)">
+        <div style="font-size:11px;font-weight:700;color:var(--teal);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Live right now</div>
+        <div style="display:flex;justify-content:space-between">
+          <div><div style="font-size:20px;font-weight:800;color:#fff;font-family:var(--fh)">&#x20B9;4.2Cr</div><div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px">MTD Revenue</div></div>
+          <div><div style="font-size:20px;font-weight:800;color:#34D399;font-family:var(--fh)">+18%</div><div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px">vs Last Year</div></div>
+          <div><div style="font-size:20px;font-weight:800;color:#fff;font-family:var(--fh)">28</div><div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px">Centers Live</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECOND SPLIT (image left, text right) -->
+<section style="background:var(--off);padding:92px 5%">
+  <div style="max-width:1260px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center" class="fade-up">
+    <div style="position:relative;border-radius:20px;overflow:hidden;box-shadow:var(--sh3)">
+      <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=900&q=85" alt="Team using technology" style="width:100%;height:380px;object-fit:cover;display:block">
+      <div style="position:absolute;top:20px;left:20px;background:var(--teal);color:#fff;font-size:11px;font-weight:700;padding:6px 14px;border-radius:100px;letter-spacing:.5px">48hr Go-Live Guarantee</div>
+    </div>
+    <div>
+      <p class="lbl">Speed of Delivery</p>
+      <h2 class="stitle">From idea to live product<br>in 48 hours</h2>
+      <p class="ssub" style="margin-top:16px">Most enterprise software projects take months. Ours take hours. We've built the deployment infrastructure so your team can see real results — fast.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px">
+        <div style="background:#fff;border:1px solid var(--bl);border-radius:var(--r);padding:18px">
+          <div style="font-family:var(--fh);font-size:28px;font-weight:800;color:var(--td)">48<span style="color:var(--teal)">hr</span></div>
+          <div style="font-size:12.5px;color:var(--ts);margin-top:4px">Avg. go-live for tools</div>
+        </div>
+        <div style="background:#fff;border:1px solid var(--bl);border-radius:var(--r);padding:18px">
+          <div style="font-family:var(--fh);font-size:28px;font-weight:800;color:var(--td)">1<span style="color:var(--teal)">wk</span></div>
+          <div style="font-size:12.5px;color:var(--ts);margin-top:4px">Avg. for full platforms</div>
+        </div>
+        <div style="background:#fff;border:1px solid var(--bl);border-radius:var(--r);padding:18px">
+          <div style="font-family:var(--fh);font-size:28px;font-weight:800;color:var(--td)">&#x20B9;<span style="color:var(--teal)">0</span></div>
+          <div style="font-size:12.5px;color:var(--ts);margin-top:4px">Setup fee to start</div>
+        </div>
+        <div style="background:#fff;border:1px solid var(--bl);border-radius:var(--r);padding:18px">
+          <div style="font-family:var(--fh);font-size:28px;font-weight:800;color:var(--td)">24<span style="color:var(--teal)">hr</span></div>
+          <div style="font-size:12.5px;color:var(--ts);margin-top:4px">Support response time</div>
+        </div>
+      </div>
+      <button class="btn-teal" style="margin-top:32px" onclick="openModal()">Start your project &#x2192;</button>
+    </div>
+  </div>
+</section>
+
+<div class="cta-bg" id="contact">
+  <h2>Ready to <span class="ac">automate</span> your business?</h2>
+  <p>Tell us what you're building &#x2014; we'll get back within 24 hours with a plan.</p>
+  <div class="cta-acts">
+    <button class="btn-w" onclick="openModal()">Send an Enquiry &#x2192;</button>
+    <a href="https://connect.sevako.in" class="btn-gw" target="_blank">Open a Support Ticket</a>
+  </div>
+  <p class="cta-em">Or write directly: <a href="mailto:enquiry@sevako.in">enquiry@sevako.in</a></p>
+</div>
+
+<footer>
+  <div class="ft-top">
+    <div class="ft-about">
+      <div class="logo-mark"><span class="s">Sev</span><span class="e">ako</span></div>
+      <p>Business technology for Indian SMEs. We build the tools that help you run smarter, faster, and with less manual work.</p>
+    </div>
+    <div class="fc"><h4>Services</h4><ul><li><a href="#services">API Integration</a></li><li><a href="#services">Web App Development</a></li><li><a href="#services">Reports Automation</a></li><li><a href="#services">Data Analytics</a></li><li><a href="#services">WhatsApp Bots</a></li></ul></div>
+    <div class="fc"><h4>Products</h4><ul><li><a href="#products">SevakoPOS</a></li><li><a href="#products">SalonOS</a></li><li><a href="#products">Sevako Helpdesk</a></li><li><a href="#products">RevTracker</a></li><li><a href="#products">BillForge</a></li></ul></div>
+    <div class="fc"><h4>Contact</h4><ul><li><a href="mailto:enquiry@sevako.in">enquiry@sevako.in</a></li><li><a href="https://connect.sevako.in" target="_blank">Support Portal</a></li><li><a href="#" onclick="openModal();return false">Send Enquiry</a></li></ul></div>
+  </div>
+  <div class="ft-bot">
+    <div class="ft-copy">&#xA9; 2025 Sevako Solutions. All rights reserved.</div>
+    <div class="ft-ind">Made with <span>&#x2665;</span> in India &#x1F1EE;&#x1F1F3;</div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay" onclick="handleOvClick(event)">
+  <div class="modal">
+    <button class="mcl" onclick="closeModal()">&#xD7;</button>
+    <div id="formView">
+      <h2>Send us an enquiry</h2>
+      <p class="m-sub">We respond within 24 hours &#xB7; <a href="mailto:enquiry@sevako.in">enquiry@sevako.in</a></p>
+      <div class="frow"><div class="fg"><label>Full name</label><input type="text" id="f_name" placeholder="Ravi Sharma"></div><div class="fg"><label>WhatsApp number</label><input type="tel" id="f_wp" placeholder="+91 98XXX XXXXX"></div></div>
+      <div class="frow"><div class="fg"><label>Email address</label><input type="email" id="f_email" placeholder="you@company.com"></div><div class="fg"><label>Business type</label><select id="f_ind"><option value="" disabled selected>Select industry</option><option>Salon &amp; Spa</option><option>Retail Store</option><option>Food &amp; Beverage</option><option>Clinic / Wellness</option><option>Real Estate</option><option>Education</option><option>Manufacturing</option><option>Franchise Chain</option><option>Professional Services</option><option>Other</option></select></div></div>
+      <div class="frow"><div class="fg"><label>Solution interested in</label><select id="f_sol"><option value="" disabled selected>Select a product</option><option>SevakoPOS</option><option>SalonOS</option><option>Sevako Helpdesk</option><option>AssetTrack</option><option>TaskFlow</option><option>BillForge</option><option>StaffSync</option><option>RevTracker</option><option>LeadNest</option><option>API Integration</option><option>Custom App</option><option>Reports Automation</option><option>Other</option></select></div><div class="fg"><label>Staff / locations</label><input type="text" id="f_size" placeholder="e.g. 25 staff, 3 branches"></div></div>
+      <div class="fg"><label>Message (optional)</label><textarea id="f_msg" placeholder="Describe what you're looking to automate..."></textarea></div>
+      <button id="subBtn" onclick="submitForm()"><span id="btnTxt">Send Enquiry</span></button>
+      <div class="smsg" id="smsg"></div>
+    </div>
+    <div class="f-success" id="successView">
+      <div class="s-ico">&#x2705;</div>
+      <h3>Enquiry Received!</h3>
+      <p>Thank you for reaching out to <strong style="color:var(--td)">Sevako Solutions</strong>.<br>Our team will contact you within 24 hours.</p>
+      <div class="s-box"><p>&#x1F4E7; Confirmation email sent.<br>&#x1F4DE; We'll reach you on WhatsApp.<br>&#x1F4AC; Urgent? Write to <strong style="color:var(--teal)">enquiry@sevako.in</strong></p></div>
+      <button class="cl-btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const c=document.getElementById('heroCanvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  let W,H,nodes=[];
+  function resize(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;init();}
+  function init(){nodes=[];const n=Math.floor(W*H/8000);for(let i=0;i<n;i++)nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.5+.5});}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<nodes.length;i++){
+      const a=nodes[i];a.x+=a.vx;a.y+=a.vy;
+      if(a.x<0||a.x>W)a.vx*=-1;if(a.y<0||a.y>H)a.vy*=-1;
+      for(let j=i+1;j<nodes.length;j++){
+        const b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+        if(d<130){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(0,196,167,${(1-d/130)*.32})`;ctx.lineWidth=.6;ctx.stroke();}
+      }
+      ctx.beginPath();ctx.arc(a.x,a.y,a.r,0,Math.PI*2);ctx.fillStyle='rgba(0,196,167,0.55)';ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);resize();draw();
+})();
+
+(function(){
+  const c=document.getElementById('autoCanvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  let W,H,t=0;
+  function resize(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(let w=0;w<4;w++){
+      ctx.beginPath();ctx.moveTo(0,H*.5);
+      for(let x=0;x<=W;x+=4){const y=H*.5+Math.sin((x/W*5+t+w*.6)*Math.PI)*55*(1-w*.15);ctx.lineTo(x,y);}
+      ctx.strokeStyle=`rgba(0,196,167,${.07-w*.015})`;ctx.lineWidth=1.5;ctx.stroke();
+    }
+    t+=.005;requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);resize();draw();
+})();
+
+const flows=[
+  {title:'FLOW: DAILY SALES \u2192 EMAIL DIGEST',steps:[{i:'\uD83D\uDCE1',t:'POS data pulled via Zenoti API at 11:59 PM',b:'Auto'},{i:'\uD83D\uDDC4\uFE0F',t:'Data cleaned & stored in SQL Server',b:'Processed'},{i:'\uD83D\uDCCA',t:'MTD / LY comparisons calculated',b:'Analysed'},{i:'\uD83D\uDCE7',t:'HTML email report sent to 12 managers',b:'Delivered'},{i:'\u2705',t:'Report logged with timestamp & recipients',b:'Done'}],metrics:[{v:'8AM',l:'Delivered by'},{v:'0',l:'Manual steps'}]},
+  {title:'FLOW: COMPLAINT \u2192 RESOLUTION',steps:[{i:'\uD83D\uDCDD',t:'Customer submits complaint on portal',b:'Received'},{i:'\uD83D\uDD14',t:'Agent auto-assigned based on category',b:'Assigned'},{i:'\u23F1\uFE0F',t:'SLA timer starts \u2014 24hr resolution window',b:'Tracking'},{i:'\uD83D\uDCF1',t:'WhatsApp alert sent to agent & supervisor',b:'Notified'},{i:'\u2705',t:'Ticket closed with full audit trail',b:'Resolved'}],metrics:[{v:'94%',l:'Resolution Rate'},{v:'<4hr',l:'Avg Time'}]},
+  {title:'FLOW: ATTENDANCE \u2192 PAYROLL \u2192 TALLY',steps:[{i:'\uD83D\uDCCD',t:'Geo-tagged punch captured from 18 centers',b:'Synced'},{i:'\uD83E\uDDEE',t:'Late deductions & incentives calculated',b:'Computed'},{i:'\uD83D\uDCC4',t:'Payslip PDFs generated for 240 employees',b:'Generated'},{i:'\uD83D\uDCE4',t:'Tally-ready XML exported in one click',b:'Exported'},{i:'\u2705',t:'Payroll locked & archived for audit',b:'Done'}],metrics:[{v:'240',l:'Employees'},{v:'1-click',l:'Tally Export'}]},
+  {title:'FLOW: PAYMENT \u2192 GST INVOICE \u2192 WHATSAPP',steps:[{i:'\uD83D\uDCB3',t:'Razorpay payment webhook received',b:'Triggered'},{i:'\uD83E\uDDFE',t:'GST invoice auto-generated with seq. no.',b:'Created'},{i:'\u2601\uFE0F',t:'Invoice uploaded to Drive & archived',b:'Stored'},{i:'\uD83D\uDCF2',t:'PDF sent via WhatsApp Business API',b:'Sent'},{i:'\u2705',t:'All done in under 3 seconds',b:'3s'}],metrics:[{v:'3s',l:'End-to-end'},{v:'100%',l:'Auto'}]},
+];
+
+function switchAuto(idx,el){
+  document.querySelectorAll('.auto-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');renderFlow(idx);
+}
+function renderFlow(idx){
+  const f=flows[idx];
+  document.getElementById('avTitle').textContent=f.title;
+  const fe=document.getElementById('avFlow');fe.innerHTML='';
+  f.steps.forEach((s,i)=>{
+    const d=document.createElement('div');d.className='av-step';
+    d.innerHTML=`<span class="av-si">${s.i}</span><span class="av-st">${s.t}</span><span class="av-sb">${s.b}</span>`;
+    fe.appendChild(d);setTimeout(()=>d.classList.add('show'),i*140+80);
+  });
+  document.getElementById('avMetrics').innerHTML=f.metrics.map(m=>`<div class="av-m"><div class="av-mv">${m.v}</div><div class="av-ml">${m.l}</div></div>`).join('');
+}
+renderFlow(0);
+
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.07});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+const cObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');e.target.querySelectorAll('.ind-chip').forEach((c,i)=>{c.style.animationDelay=i*.05+'s';});cObs.unobserve(e.target);}});},{threshold:.1});
+document.querySelectorAll('.ind-grid').forEach(el=>cObs.observe(el));
+
+const SU='https://script.google.com/macros/s/AKfycbxvfiulrKGUfV1luhfRWfx4Ve9VqlYb5p22tc6-BrS-3ghQyB-0upJmjV7tEfKXnBGD/exec';
+function openModal(){document.getElementById('modalOverlay').classList.add('open');document.body.style.overflow='hidden';document.getElementById('formView').style.display='block';document.getElementById('successView').style.display='none';document.getElementById('smsg').textContent='';}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleOvClick(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+async function submitForm(){
+  const n=document.getElementById('f_name').value.trim();
+  const w=document.getElementById('f_wp').value.trim();
+  const em=document.getElementById('f_email').value.trim();
+  const ind=document.getElementById('f_ind').value;
+  const sol=document.getElementById('f_sol').value;
+  const sz=document.getElementById('f_size').value.trim();
+  const mg=document.getElementById('f_msg').value.trim();
+  const s=document.getElementById('smsg');const btn=document.getElementById('subBtn');const bt=document.getElementById('btnTxt');
+  s.className='smsg';s.textContent='';
+  if(!n){s.className='smsg e';s.textContent='Please enter your full name.';return;}
+  if(!w){s.className='smsg e';s.textContent='Please enter your WhatsApp number.';return;}
+  btn.disabled=true;bt.textContent='Sending\u2026';
+  const ts=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
+  try{await fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({timestamp:ts,name:n,whatsapp:w,email:em,industry:ind,solution:sol,size:sz,message:mg})});}catch(err){console.warn(err);}
+  document.getElementById('formView').style.display='none';
+  document.getElementById('successView').style.display='block';
+  btn.disabled=false;bt.textContent='Send Enquiry';
+}
+</script>
+</body>
+</html>
