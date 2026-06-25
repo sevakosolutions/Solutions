@@ -1,0 +1,40 @@
+# ═══════════════════════════════════════════
+# robots.txt — sevako.in
+# Sevako Solutions | Business Technology for Indian SMEs
+# ═══════════════════════════════════════════
+
+# Allow all search engine crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://sevako.in/sitemap.xml
+
+# ═══ SPECIFIC CRAWLER RULES ═══
+
+# Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+# Block AI training bots (optional — remove if you want AI visibility)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+# Block irrelevant crawlers
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
